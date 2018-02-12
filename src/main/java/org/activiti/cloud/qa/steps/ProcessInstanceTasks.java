@@ -19,17 +19,11 @@ package org.activiti.cloud.qa.steps;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.activiti.cloud.qa.model.AuthToken;
-import org.activiti.cloud.qa.model.Event;
-import org.activiti.cloud.qa.model.EventType;
-import org.activiti.cloud.qa.model.EventsResponse;
-import org.activiti.cloud.qa.model.ProcessInstanceResponse;
-import org.activiti.cloud.qa.model.Task;
-import org.activiti.cloud.qa.model.TaskAction;
-import org.activiti.cloud.qa.model.TasksResponse;
+import org.activiti.cloud.qa.model.*;
 import org.activiti.cloud.qa.service.AuthenticationService;
 import org.activiti.cloud.qa.service.EventService;
 import org.activiti.cloud.qa.service.ProcessInstanceService;
+import org.activiti.cloud.qa.service.QueryService;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -123,5 +117,26 @@ public class ProcessInstanceTasks {
         assertThat(resultingEvent.getProcessInstanceId()).isEqualTo(processInstanceResponse.getId());
         assertThat(resultingEvent.getEventType()).isEqualTo(EventType.TASK_COMPLETED);
         assertThat(resultingEvent.getTask().getId()).isEqualTo(currentTask.getId());
+    }
+
+    @Then("the status of the process is changed to completed by querying")
+    public void verifyProcessStatusByQuery() {
+        QueryResponse queryResponse = null;
+        try {
+            queryResponse = QueryService.queryProcess(processInstanceResponse.getId(),
+                    authToken);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertThat(queryResponse).isNotNull();
+        assertThat(queryResponse.getEmbeddedEvents()).isNotNull();
+        assertThat(queryResponse.getEmbeddedEvents()).isNotNull();
+        ProcessInstance instance = queryResponse.getEmbeddedEvents().getProcessInstances().get(0);
+        assertThat(instance).isNotNull();
+        assertThat(instance.getProcessInstanceId()).isEqualTo(processInstanceResponse.getId());
+        //System.err.println("status:" + instance.getStatus());
+        assertThat(instance.getStatus()).isEqualTo(QueryStatus.COMPLETED.getType());
     }
 }

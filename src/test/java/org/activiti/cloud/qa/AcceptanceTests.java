@@ -30,7 +30,8 @@ public class AcceptanceTests extends SerenityStories {
     public void storiesInit() throws Exception {
         String ingress = System.getenv("HOST");
         System.out.println("Found host from env variable: " + ingress);
-
+        String ingressSSO = System.getenv("SSOHOST");
+        System.out.println("Found SSO host from env variable: " + ingressSSO);
         File file = new File(getClass().getClassLoader().getResource("config.properties").getFile());
         FileInputStream fileInput = new FileInputStream(file);
         Properties properties = new Properties();
@@ -43,6 +44,9 @@ public class AcceptanceTests extends SerenityStories {
             String value = properties.getProperty(key);
             if(value.contains("${HOST}")){
                 value = value.replace("${HOST}", ingress);
+            }
+            if(value.contains("${SSOHOST}")){
+                value = value.replace("${SSOHOST}", ingressSSO);
             }
             System.out.println(key + ": " + value);
             Config.getInstance().put(key, value);

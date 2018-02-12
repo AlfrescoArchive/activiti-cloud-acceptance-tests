@@ -36,7 +36,7 @@ public class ProcessInstanceService {
 
         ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest();
         processInstanceRequest.setCommandType("StartProcessInstanceCmd");
-        processInstanceRequest.setProcessDefinitionKey("ProcessWithVariables");
+        processInstanceRequest.setProcessDefinitionKey("SimpleProcess");
 
         return Serializer.toProcessInstance(ConnectorHelper.postJson(Config.getInstance().getProperties().getProperty("rb.processinstance.url"), processInstanceRequest, authToken));
 
