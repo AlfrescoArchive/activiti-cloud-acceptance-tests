@@ -24,4 +24,10 @@ public class AuthToken {
         return access_token;
     }
 
+    @Override
+    public String toString() {
+        return "AuthToken{" +
+                "access_token='" + access_token + '\'' +
+                '}';
+    }
 }

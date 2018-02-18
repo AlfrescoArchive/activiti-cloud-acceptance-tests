@@ -26,10 +26,15 @@ import org.jbehave.core.annotations.BeforeStories;
 
 public class AcceptanceTests extends SerenityStories {
 
+    public static final String GATEWAY_HOST = "GATEWAY_HOST";
+    public static final String SSO_HOST = "SSO_HOST";
+    public static final String SSO_HOST_KEY = "${"+SSO_HOST+"}";
+    public static final String GATEWAY_HOST_KEY = "${"+GATEWAY_HOST+"}";
+
     @BeforeStories
     public void storiesInit() throws Exception {
-        String ingress = System.getenv("HOST");
-        System.out.println("Found host from env variable: " + ingress);
+        String ingress = System.getenv(GATEWAY_HOST);
+        String ingressSSO = System.getenv(SSO_HOST);
 
         File file = new File(getClass().getClassLoader().getResource("config.properties").getFile());
         FileInputStream fileInput = new FileInputStream(file);
@@ -41,10 +46,13 @@ public class AcceptanceTests extends SerenityStories {
         while (enuKeys.hasMoreElements()) {
             String key = (String) enuKeys.nextElement();
             String value = properties.getProperty(key);
-            if(value.contains("${HOST}")){
-                value = value.replace("${HOST}", ingress);
+            if(value.contains(GATEWAY_HOST_KEY)){
+                value = value.replace(GATEWAY_HOST_KEY, ingress);
             }
-            System.out.println(key + ": " + value);
+            if(value.contains(SSO_HOST_KEY)){
+                value = value.replace(SSO_HOST_KEY, ingressSSO);
+            }
+
             Config.getInstance().put(key, value);
         }
     }

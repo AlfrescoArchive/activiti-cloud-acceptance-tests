@@ -21,10 +21,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.activiti.cloud.qa.model.AuthToken;
-import org.activiti.cloud.qa.model.EventsResponse;
-import org.activiti.cloud.qa.model.ProcessInstanceResponse;
-import org.activiti.cloud.qa.model.TasksResponse;
+import org.activiti.cloud.qa.model.*;
 
 public class Serializer {
 
@@ -51,6 +48,9 @@ public class Serializer {
         return objectMapper.readValue(eventsResponse, EventsResponse.class);
     }
 
+    public static QueryResponse toQueryResponse(String queryResponse) throws IOException{
+        return objectMapper.readValue(queryResponse, QueryResponse.class);
+    }
     public static String toJsonString(Object object)throws JsonProcessingException{
 
         return objectMapper.writeValueAsString(object);
