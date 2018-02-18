@@ -18,7 +18,6 @@ public class QueryService {
         Map<String, String> params = new HashMap<String, String>();
         params.put("processInstanceId", processInstanceId);
         QueryResponse response = Serializer.toQueryResponse(ConnectorHelper.get(Config.getInstance().getProperties().getProperty("query.event.url") , params, authToken));
-        System.err.println(response);
         return response;
     }
 }
