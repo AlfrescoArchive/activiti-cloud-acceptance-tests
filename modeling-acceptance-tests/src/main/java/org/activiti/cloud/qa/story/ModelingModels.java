@@ -80,11 +80,13 @@ public class ModelingModels {
         }
     }
 
-    @When("the user opens the $modelType model '$modelName'")
+    @When("the user opens the $modelType model '$modelName' version $modelVersion")
     public void openModel(String modelType,
-                          String modelName) {
+                          String modelName,
+                          String modelVersion) {
         modelingModelsSteps.openModelingObject(identified(modelName,
-                                                          modelType));
+                                                          modelType,
+                                                          modelVersion));
     }
 
     @When("edits and saves the model")

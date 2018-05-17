@@ -35,6 +35,6 @@ And the version of the process model 'Recruiting Crew for Mars' is 0.0.1
 Scenario: create the second version of an existing version of a process model
 Given any authenticated user
 And an existing process model 'Recruiting Crew for Mars' with version 0.0.1
-When the user opens the process model 'Recruiting Crew for Mars'
+When the user opens the process model 'Recruiting Crew for Mars' version 0.0.1
 And edits and saves the model
 Then the model is saved with the version 0.0.2
