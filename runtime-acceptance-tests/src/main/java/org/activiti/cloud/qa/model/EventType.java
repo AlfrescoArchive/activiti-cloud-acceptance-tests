@@ -28,10 +28,13 @@ public enum EventType {
     TASK_ASSIGNED("TaskAssignedEvent"),
     TASK_CANCELLED("TaskCancelledEvent"),
     ACTIVITY_STARTED("ActivityStartedEvent"),
+    ACTIVITY_CANCELLED("ActivityCancelledEvent"),
     ACTIVITY_COMPLETED("ActivityCompletedEvent"),
+    ACTIVITY_CANCELLED_EVENT("ActivityCancelledEvent"),
     SEQUENCE_FLOW_TAKEN("SequenceFlowTakenEvent"),
     TASK_CANDIDATE_GROUP_REMOVED("TaskCandidateGroupRemovedEvent"),
-    TASK_CANDIDATE_GROUP_ADDED("TaskCandidateGroupAddedEvent");
+    TASK_CANDIDATE_GROUP_ADDED("TaskCandidateGroupAddedEvent"),
+    VARIABLE_CREATED("VariableCreatedEvent");
 
     private final String type;
 

@@ -17,9 +17,7 @@
 package org.activiti.cloud.qa.steps;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import net.thucydides.core.annotations.Step;
 import org.activiti.cloud.qa.model.Event;
@@ -28,7 +26,6 @@ import org.activiti.cloud.qa.model.TaskStatus;
 import org.activiti.cloud.qa.rest.feign.EnableRuntimeFeignContext;
 import org.activiti.cloud.qa.service.AuditService;
 import org.assertj.core.api.Condition;
-import org.jsoup.select.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.*;
@@ -63,8 +60,15 @@ public class AuditSteps {
     public void checkProcessInstanceEvent(String processInstanceId,
                                           EventType eventType) throws Exception {
 
-        assertThat(getEventsByProcessInstanceIdAndEventType(processInstanceId,
-                                                            eventType)).isNotEmpty();
+        Collection<Event> events = getEventsByProcessInstanceIdAndEventType(processInstanceId,
+                eventType);
+
+        assertThat(events).isNotEmpty();
+        Event resultingEvent = events.iterator().next();
+        assertThat(resultingEvent).isNotNull();
+        assertThat(resultingEvent.getProcessInstanceId()).isEqualTo(processInstanceId);
+        assertThat(resultingEvent.getServiceName()).isNotEmpty();
+        assertThat(resultingEvent.getServiceFullName()).isNotEmpty();
     }
 
     @Step
@@ -79,6 +83,8 @@ public class AuditSteps {
         Event resultingEvent = events.iterator().next();
         assertThat(resultingEvent).isNotNull();
         assertThat(resultingEvent.getTask().getId()).isEqualTo(taskId);
+        assertThat(resultingEvent.getServiceName()).isNotEmpty();
+        assertThat(resultingEvent.getServiceFullName()).isNotEmpty();
     }
 
     @Step
@@ -111,10 +117,10 @@ public class AuditSteps {
                             "eventType")
                 .containsExactly(
                         tuple(taskId,
-                              TaskStatus.ASSIGNED,
-                              EventType.TASK_ASSIGNED),
+                                TaskStatus.ASSIGNED,
+                                EventType.TASK_ASSIGNED),
                         tuple(taskId,
-                              TaskStatus.CREATED,
+                              TaskStatus.ASSIGNED,
                               EventType.TASK_CREATED));
     }
 
@@ -133,13 +139,43 @@ public class AuditSteps {
                             "eventType")
                 .containsExactly(
                         tuple(taskId,
-                              TaskStatus.CANCELLED,
-                              EventType.TASK_CANCELLED),
+                                TaskStatus.CANCELLED,
+                                EventType.TASK_CANCELLED),
                         tuple(taskId,
-                              TaskStatus.ASSIGNED,
-                              EventType.TASK_ASSIGNED),
+                                TaskStatus.ASSIGNED,
+                                EventType.TASK_ASSIGNED),
                         tuple(taskId,
-                              TaskStatus.CREATED,
-                              EventType.TASK_CREATED));
+                                TaskStatus.ASSIGNED,
+                                EventType.TASK_CREATED)
+);
+    }
+
+    /**
+     * Check if for a given task a new subtask is created
+     * @param subtaskId the id of the task (from rb)
+     * @param parentTaskId id of the parent task referenced in subtask
+     */
+    @Step
+    public void checkSubtaskCreated(String subtaskId,
+                                    String parentTaskId) {
+
+        final Collection<Event> events = getEvents();
+        Condition<Event> taskIsMatched = new Condition<Event>() {
+            @Override
+            public boolean matches(Event event) {
+
+                return event.getTask() != null && subtaskId.equals(event.getTask().getId());
+            }
+        };
+
+        assertThat(events).isNotNull()
+                .isNotEmpty()
+                .filteredOn(taskIsMatched).hasSize(2)
+                .extracting("task.id",
+                            "task.parentTaskId")
+                .contains(tuple(subtaskId,
+                                parentTaskId),
+                          tuple(subtaskId,
+                                parentTaskId));
     }
 }

@@ -16,7 +16,7 @@
 
 package org.activiti.cloud.qa.model;
 
-public class Task {
+public class Task extends ActivitiEntityMetadata {
 
     private String id;
 
@@ -27,6 +27,8 @@ public class Task {
     private String processInstanceId;
 
     private TaskStatus status;
+
+    private String parentTaskId;
 
     public String getId() {
         return id;
@@ -46,5 +48,9 @@ public class Task {
 
     public TaskStatus getStatus() {
         return status;
+    }
+
+    public String getParentTaskId() {
+        return parentTaskId;
     }
 }

@@ -35,6 +35,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resources;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -119,7 +120,7 @@ public class RuntimeBundleSteps {
 
     @Step
     public void waitForMessagesToBeConsumed() throws InterruptedException {
-        Thread.sleep(200);
+        Thread.sleep(220);
     }
 
     @Step
@@ -128,6 +129,17 @@ public class RuntimeBundleSteps {
                 runtimeBundleService.createNewTask(new CreateTaskCmd("new-task",
                                                                      "task-description",
                                                                      "CreateTaskCmd")));
+    }
+
+    public Task createSubtask(String parentTaskId) {
+        return runtimeBundleService.createSubtask(parentTaskId,
+                                                  new CreateTaskCmd("subtask",
+                                                                    "subtask-description",
+                                                                    "CreateTaskCmd"));
+    }
+
+    public Resources getSubtasks(String parentTaskId) {
+        return runtimeBundleService.getSubtasks(parentTaskId);
     }
 
     @Step
@@ -181,6 +193,6 @@ public class RuntimeBundleSteps {
     public void checkTaskNotFound(String taskId) {
         assertThatExceptionOfType(Exception.class).isThrownBy(
                 () -> runtimeBundleService.getTaskById(taskId)
-        ).withMessageContaining("Not Found");
+        ).withMessageContaining("Unable to find task");
     }
 }
