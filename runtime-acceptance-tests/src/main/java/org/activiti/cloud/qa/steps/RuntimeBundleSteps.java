@@ -56,6 +56,9 @@ public class RuntimeBundleSteps {
     private RuntimeBundleService runtimeBundleService;
 
     @Autowired
+    private RuntimeBundleService runtimeBundleAnotherService;
+
+    @Autowired
     private RuntimeBundleDiagramService runtimeBundleDiagramService;
 
     @Step
@@ -70,17 +73,21 @@ public class RuntimeBundleSteps {
 
     @Step
     public ProcessInstance startProcess() {
-        return this.startProcess(DEFAULT_PROCESS_INSTANCE_KEY);
+        return this.startProcess(DEFAULT_PROCESS_INSTANCE_KEY, true);
     }
 
     @Step
-    public ProcessInstance startProcess(String process) {
+    public ProcessInstance startProcess(String process, boolean isPrimaryService) {
 
         ProcessInstance processInstance = new ProcessInstance();
         processInstance.setCommandType(DEFAULT_PROCESS_INSTANCE_COMMAND_TYPE);
         processInstance.setProcessDefinitionKey(process);
 
-        return dirtyContextHandler.dirty(runtimeBundleService.startProcess(processInstance));
+        if (isPrimaryService) {
+            return dirtyContextHandler.dirty(runtimeBundleService.startProcess(processInstance));
+        } else {
+        	return dirtyContextHandler.dirty(runtimeBundleAnotherService.startProcess(processInstance));
+        }
     }
 
     @Step

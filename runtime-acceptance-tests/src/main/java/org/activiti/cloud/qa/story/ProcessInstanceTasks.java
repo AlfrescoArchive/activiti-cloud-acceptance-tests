@@ -62,7 +62,7 @@ public class ProcessInstanceTasks {
 
     @When("the user starts process '$process'")
     public void startProcess(String process) throws Exception {
-        processInstance = runtimeBundleSteps.startProcess(process);
+        processInstance = runtimeBundleSteps.startProcess(process, true);
         assertThat(processInstance).isNotNull();
 
         List<Task> tasks = new ArrayList<>(

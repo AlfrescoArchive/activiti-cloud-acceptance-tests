@@ -37,6 +37,9 @@ public class RuntimeTestsConfigurationProperties {
     @Value("${runtime.bundle.url}")
     private String runtimeBundleUrl;
 
+    @Value("${runtime.bundle.another.url}")
+    private String runtimeBundleAnotherUrl;
+
     @Value("${query.url}")
     private String queryUrl;
 
@@ -49,6 +52,10 @@ public class RuntimeTestsConfigurationProperties {
 
     public String getRuntimeBundleUrl() {
         return runtimeBundleUrl;
+    }
+
+    public String getRuntimeBundleAnotherUrl() {
+        return runtimeBundleAnotherUrl;
     }
 
     public String getQueryUrl() {
