@@ -151,4 +151,17 @@ public class ProcessInstanceTasks {
         runtimeBundleSteps.suspendProcessInstance(processInstance.getId());
     }
 
+    @When("the user starts signal catch process on primary runtime and starts signal throw process on secondary runtime")
+    public void startSignalCatchProcessInstance() {
+        processInstance = runtimeBundleSteps.startProcess("SignalCatchEventProcess", true);
+        assertThat(processInstance).isNotNull();
+        runtimeBundleSteps.startProcess("SignalThrowEventProcess", false);
+    }
+
+    @Then("a signal was received and the signal catch process was completed")
+    public void startSignalThrowProcessInstance() throws Exception {
+        runtimeBundleSteps.waitForMessagesToBeConsumed();
+        querySteps.checkProcessInstanceStatus(processInstance.getId(),
+                ProcessInstanceStatus.COMPLETED);
+    }
 }
