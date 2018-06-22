@@ -23,7 +23,7 @@ pipeline {
           }
         }
       }
-      stage('Run Tests') {
+      stage('Build Release') {
         when {
           branch 'develop'
         }
