@@ -39,7 +39,7 @@ pipeline {
             sh 'export GATEWAY_HOST=gw.jx-staging.activiti.envalfresco.com'
             sh 'export SSO_HOST=jx-staging-quickstart-http.jx-staging.activiti.envalfresco.com'
             sh 'export REALM=activiti'
-            sh 'mvn -pl "\\!modeling-acceptance-tests,\\!apps-acceptance-tests" clean verify'
+            sh 'mvn -pl \'!modeling-acceptance-tests,!apps-acceptance-tests\' clean verify'
 
           }
         }
