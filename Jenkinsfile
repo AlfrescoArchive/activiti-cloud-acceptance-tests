@@ -27,9 +27,6 @@ pipeline {
         when {
           branch 'develop'
         }
-        withEnv(["GOPATH=/ws","PATH=/ws/bin:${env.PATH}"]) {
-            sh 'bash build.sh'
-        }
         steps {
           container('maven') {
             // ensure we're not on a detached head
