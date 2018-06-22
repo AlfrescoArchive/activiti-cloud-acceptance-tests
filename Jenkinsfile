@@ -27,6 +27,9 @@ pipeline {
         when {
           branch 'develop'
         }
+        withEnv(["GOPATH=/ws","PATH=/ws/bin:${env.PATH}"]) {
+            sh 'bash build.sh'
+        }
         steps {
           container('maven') {
             // ensure we're not on a detached head
@@ -36,10 +39,12 @@ pipeline {
             sh "jx step git credentials"
           }
           container('maven') {
-            sh 'export GATEWAY_HOST=gw.jx-staging.activiti.envalfresco.com'
-            sh 'export SSO_HOST=jx-staging-quickstart-http.jx-staging.activiti.envalfresco.com'
-            sh 'export REALM=activiti'
-            sh 'mvn -pl \'!modeling-acceptance-tests,!apps-acceptance-tests\' clean verify'
+            sh '''
+              export GATEWAY_HOST=gw.jx-staging.activiti.envalfresco.com
+              export SSO_HOST=jx-staging-quickstart-http.jx-staging.activiti.envalfresco.com
+              export REALM=activiti
+              mvn -pl \'!modeling-acceptance-tests,!apps-acceptance-tests\' clean verify
+              '''
 
           }
         }
