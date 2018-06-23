@@ -52,14 +52,6 @@ public class RuntimeFeignConfiguration {
     }
 
     @Bean
-    public RuntimeBundleService runtimeBundleAnotherService() {
-        return FeignRestDataClient
-                .builder()
-                .target(RuntimeBundleService.class,
-                        runtimeTestsConfigurationProperties.getRuntimeBundleAnotherUrl());
-    }
-
-    @Bean
     public RuntimeBundleDiagramService runtimeBundleDiagramService() {
         return Feign.builder()
                 .encoder(new GsonEncoder())

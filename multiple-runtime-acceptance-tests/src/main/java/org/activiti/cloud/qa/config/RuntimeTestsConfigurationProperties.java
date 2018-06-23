@@ -37,8 +37,14 @@ public class RuntimeTestsConfigurationProperties {
     @Value("${runtime.bundle.url}")
     private String runtimeBundleUrl;
 
+    @Value("${runtime.bundle.another.url}")
+    private String runtimeBundleAnotherUrl;
+
     @Value("${query.url}")
     private String queryUrl;
+
+    @Value("${apps.url}")
+    private String appsUrl;
 
     public String getAuditEventUrl() {
         return auditEventUrl;
@@ -48,8 +54,15 @@ public class RuntimeTestsConfigurationProperties {
         return runtimeBundleUrl;
     }
 
+    public String getRuntimeBundleAnotherUrl() {
+        return runtimeBundleAnotherUrl;
+    }
+
     public String getQueryUrl() {
         return queryUrl;
     }
 
+    public String getAppsUrl() {
+        return appsUrl;
+    }
 }
