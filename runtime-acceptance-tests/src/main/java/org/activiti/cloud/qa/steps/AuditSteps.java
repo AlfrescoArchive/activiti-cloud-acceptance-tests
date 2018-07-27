@@ -154,19 +154,6 @@ public class AuditSteps {
 
         await().untilAsserted(() -> {
 
-            final Collection<CloudRuntimeEvent> events = getEvents();
-
-            for (CloudRuntimeEvent event: events){
-                if (event instanceof CloudTaskRuntimeEvent) {
-                    System.out.println("Here it is: " + event.getId());
-                    System.out.println("Task id is: " + ((CloudTaskRuntimeEvent)event).getEntity().getId());
-                    System.out.println(taskId);
-                    System.out.println("/n");
-                }
-            }
-
-            System.out.println("............");
-
             assertThat(getEvents())
                     .isNotEmpty()
                     .filteredOn(event -> event instanceof CloudTaskRuntimeEvent && ((CloudTaskRuntimeEvent)event).getEntity() != null
