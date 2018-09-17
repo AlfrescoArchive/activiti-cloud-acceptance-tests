@@ -33,3 +33,9 @@ Given the user is authenticated as a testuser
 When the user starts a connector process
 Then the status of the process is changed to completed
 And a variable was created with name var1
+
+Scenario: complete a process instance that uses a connector matching variables
+Given the user is authenticated as a testuser
+When the user starts a connector process with input-variable-name-1 and variable-not-mapped variables
+Then the status of the process is changed to completed
+And a variable was created with name output-variable-name-1

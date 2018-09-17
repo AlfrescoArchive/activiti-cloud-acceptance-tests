@@ -17,7 +17,9 @@
 package org.activiti.cloud.qa.story;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
@@ -38,6 +40,7 @@ import org.jbehave.core.annotations.When;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
+import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.CONNECTOR_PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProcessInstanceTasks {
@@ -67,7 +70,7 @@ public class ProcessInstanceTasks {
     @When("the user starts process '$process' with tasks")
     public void startProcessWithTasks(String process) throws Exception {
 
-        processInstance = runtimeBundleSteps.startProcess(process);
+        processInstance = runtimeBundleSteps.startProcess(process, null);
 
         assertThat(processInstance).isNotNull();
 
@@ -85,11 +88,24 @@ public class ProcessInstanceTasks {
     @When("the user starts process '$process'")
     public void startProcess(String process) throws Exception {
 
-        processInstance = runtimeBundleSteps.startProcess(process);
+        processInstance = runtimeBundleSteps.startProcess(process, null);
 
         assertThat(processInstance).isNotNull();
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
 
+    }
+
+    @When("the user starts a connector process with $matchVariable and $notMatchVariable variables")
+    public void startConnectorProcessWithVariables(String matchVariable, String notMatchVariable){
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put(matchVariable, matchVariable);
+        variables.put(notMatchVariable, notMatchVariable);
+
+        processInstance = runtimeBundleSteps.startProcess(CONNECTOR_PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY, variables);
+
+        assertThat(processInstance).isNotNull();
+        Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
     }
 
     @When("the user starts a simple process")
@@ -182,7 +198,7 @@ public class ProcessInstanceTasks {
 
     @Given("any suspended process instance")
     public void suspendCurrentProcessInstance() {
-        processInstance = runtimeBundleSteps.startProcess();
+        processInstance = runtimeBundleSteps.startProcess(null);
         runtimeBundleSteps.suspendProcessInstance(processInstance.getId());
     }
 

@@ -49,13 +49,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @EnableRuntimeFeignContext
 public class RuntimeBundleSteps {
 
-    public static final String DEFAULT_PROCESS_INSTANCE_COMMAND_TYPE = "START_PROCESS";
-
     public static final String SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY = "SimpleProcess";
 
     public static final String CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY = "ConnectorProcess";
 
     public static final String PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY = "ProcessWithVariables";
+
+    public static final String CONNECTOR_PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY = "ConnectorProcessWithActions";
 
     @Autowired
     private RuntimeDirtyContextHandler dirtyContextHandler;
@@ -77,15 +77,16 @@ public class RuntimeBundleSteps {
     }
 
     @Step
-    public CloudProcessInstance startProcess() {
-        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY);
+    public CloudProcessInstance startProcess(Map<String, Object> variables) {
+        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY, variables);
     }
 
     @Step
-    public CloudProcessInstance startProcess(String process) {
+    public CloudProcessInstance startProcess(String process, Map<String, Object> variables) {
 
         return dirtyContextHandler.dirty(runtimeBundleService.startProcess(ProcessPayloadBuilder
-                                                                                   .start()
+                                                                                   .start().
+                                                                                    withVariables(variables)
                                                                                    .withProcessDefinitionKey(process)
                                                                                    .build()));
     }
