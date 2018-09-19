@@ -50,7 +50,7 @@ public class SecurityPoliciesActions {
     @Then("the user cannot start the process with variables")
     public void startProcess() throws Exception {
         try {
-            runtimeBundleSteps.startProcess(PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY);
+            runtimeBundleSteps.startProcess(PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY, null);
         }catch (FeignException exception){
             assertThat(exception.getMessage()).contains("Unable to find process definition for the given id:'ProcessWithVariables'");
         }
