@@ -34,8 +34,9 @@ When the user starts a connector process
 Then the status of the process is changed to completed
 And a variable was created with name var1
 
-Scenario: complete a process instance that uses a connector matching variables
+Scenario: complete a process instance that sends one inbound connector matching variable(one excluded), and receives one matching(one excluded) from the connector
 Given the user is authenticated as a testuser
-When the user starts a connector process with input-variable-name-1 and variable-not-mapped variables
+When the user starts a connector process with matching input-variable-name-1 and not matching variable-not-mapped variables
 Then the status of the process is changed to completed
-And a variable was created with name output-variable-name-1
+And the connector receives the matching input-variable-name-1 variable
+And a list of input-variable-name-1,variable-not-mapped,output-variable-name-1 variables was created

@@ -108,31 +108,31 @@ public class AuditSteps {
         });
     }
 
-
     @Step
-    public void checkProcessInstanceVariableEvent(String processInstanceId,
-                                              String variableName,
-                                              VariableEvent.VariableEvents eventType) throws Exception {
+    public void checkProcessInstanceVariableEvents(String processInstanceId,
+                                                  List<String> variableNames,
+                                                  VariableEvent.VariableEvents eventType) throws Exception {
 
         Collection<CloudRuntimeEvent> events = getEventsByProcessInstanceIdAndEventType(processInstanceId,
                 eventType.name());
-
 
         await().untilAsserted(() -> {
 
             assertThat(events).isNotEmpty();
             assertThat(events).extracting(e -> e.getEventType()).containsOnly(eventType);
             List<CloudRuntimeEvent> processInstanceTasks = events.stream().filter(e -> ((CloudVariableEvent) e).getEntity().getProcessInstanceId().equals(processInstanceId)).collect(Collectors.toList());
-            assertThat(processInstanceTasks).hasSize(1);
-            CloudRuntimeEvent resultingEvent = processInstanceTasks.get(0);
-            assertThat(resultingEvent).isNotNull();
-            assertThat(resultingEvent).isInstanceOf(CloudVariableEvent.class);
-            assertThat(((CloudVariableEvent) resultingEvent).getEntity().getName()).isEqualTo(variableName);
-            assertThat(resultingEvent.getServiceName()).isNotEmpty();
-            assertThat(resultingEvent.getServiceFullName()).isNotEmpty();
 
+            assertThat(processInstanceTasks).isNotEmpty();
+            for(CloudRuntimeEvent resultingEvent : processInstanceTasks){
+                assertThat(resultingEvent).isNotNull();
+                assertThat(resultingEvent).isInstanceOf(CloudVariableEvent.class);
+                assertThat(((CloudVariableEvent) resultingEvent).getEntity().getName()).isIn(variableNames);
+                assertThat(resultingEvent.getServiceName()).isNotEmpty();
+                assertThat(resultingEvent.getServiceFullName()).isNotEmpty();
+            }
         });
     }
+
     @Step
     public Collection<CloudRuntimeEvent> getEvents() {
         return auditService.getEvents().getContent();

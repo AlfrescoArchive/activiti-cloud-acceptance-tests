@@ -17,6 +17,7 @@
 package org.activiti.cloud.qa.steps;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import net.thucydides.core.annotations.Step;
@@ -86,11 +87,11 @@ public class QuerySteps {
     }
 
     @Step
-    public void checkProcessInstanceHasVariable(String processInstanceId, String variableName) throws Exception {
+    public void checkProcessInstanceHasVariables(String processInstanceId, List<String> variableNames) throws Exception {
 
         await().untilAsserted(() -> {
 
-            assertThat(variableName).isNotNull();
+            assertThat(variableNames).isNotNull();
 
             final Collection<CloudVariableInstance> variableInstances = queryService.getProcessInstanceVariables(processInstanceId).getContent();
 
@@ -98,8 +99,7 @@ public class QuerySteps {
             assertThat(variableInstances).isNotEmpty();
 
             //one of the variables should have name matching variableName
-            assertThat(variableInstances).extracting(VariableInstance::getName).contains(variableName);
-
+            variableNames.forEach(variableName -> assertThat(variableInstances).extracting(VariableInstance::getName).contains(variableName));
         });
     }
 
@@ -127,8 +127,6 @@ public class QuerySteps {
                     parentTaskId));
 
         });
-
-
     }
 
     @Step

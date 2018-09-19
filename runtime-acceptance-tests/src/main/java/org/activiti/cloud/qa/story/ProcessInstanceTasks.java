@@ -30,6 +30,7 @@ import org.activiti.api.task.model.Task;
 import org.activiti.api.task.model.events.TaskRuntimeEvent;
 import org.activiti.cloud.qa.rest.error.ExpectRestNotFound;
 import org.activiti.cloud.qa.steps.AuditSteps;
+import org.activiti.cloud.qa.steps.ConnectorSteps;
 import org.activiti.cloud.qa.steps.QuerySteps;
 import org.activiti.cloud.qa.steps.RuntimeBundleSteps;
 import org.jbehave.core.annotations.Alias;
@@ -54,6 +55,9 @@ public class ProcessInstanceTasks {
     @Steps
     private QuerySteps querySteps;
 
+    @Steps
+    private ConnectorSteps connectorSteps;
+
     private ProcessInstance processInstance;
 
     private String processInstanceDiagram;
@@ -70,7 +74,7 @@ public class ProcessInstanceTasks {
     @When("the user starts process '$process' with tasks")
     public void startProcessWithTasks(String process) throws Exception {
 
-        processInstance = runtimeBundleSteps.startProcess(process, null);
+        processInstance = runtimeBundleSteps.startProcess(process);
 
         assertThat(processInstance).isNotNull();
 
@@ -88,14 +92,14 @@ public class ProcessInstanceTasks {
     @When("the user starts process '$process'")
     public void startProcess(String process) throws Exception {
 
-        processInstance = runtimeBundleSteps.startProcess(process, null);
+        processInstance = runtimeBundleSteps.startProcess(process);
 
         assertThat(processInstance).isNotNull();
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
 
     }
 
-    @When("the user starts a connector process with $matchVariable and $notMatchVariable variables")
+    @When("the user starts a connector process with matching $matchVariable and not matching $notMatchVariable variables")
     public void startConnectorProcessWithVariables(String matchVariable, String notMatchVariable){
 
         Map<String, Object> variables = new HashMap<>();
@@ -107,6 +111,12 @@ public class ProcessInstanceTasks {
         assertThat(processInstance).isNotNull();
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
     }
+
+    @Then("the connector receives the matching $matchVariable variable")
+    public void checkInBoundVariableInConnector(String matchVariable){
+        connectorSteps.getInBoundVariable(matchVariable);
+    }
+
 
     @When("the user starts a simple process")
     public void startSimpleProcess() throws Exception {
@@ -159,11 +169,17 @@ public class ProcessInstanceTasks {
 
     @Then("a variable was created with name $variableName")
     public void verifyVariableCreated(String variableName) throws Exception {
+        List<String> variableNames = new ArrayList<>();
+        variableNames.add(variableName);
+        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variableNames);
 
-        querySteps.checkProcessInstanceHasVariable(processInstance.getId(),variableName);
+        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variableNames, VariableEvent.VariableEvents.VARIABLE_CREATED);
 
-        auditSteps.checkProcessInstanceVariableEvent(processInstance.getId(), variableName, VariableEvent.VariableEvents.VARIABLE_CREATED);
-
+    }
+    @Then("a list of $variables variables was created")
+    public void verifyVariablesCreated(List<String> variables) throws Exception{
+        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variables);
+        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variables, VariableEvent.VariableEvents.VARIABLE_CREATED);
     }
 
     @When("the user cancel the process")
@@ -198,7 +214,7 @@ public class ProcessInstanceTasks {
 
     @Given("any suspended process instance")
     public void suspendCurrentProcessInstance() {
-        processInstance = runtimeBundleSteps.startProcess(null);
+        processInstance = runtimeBundleSteps.startProcess();
         runtimeBundleSteps.suspendProcessInstance(processInstance.getId());
     }
 

@@ -40,6 +40,9 @@ public class RuntimeTestsConfigurationProperties {
     @Value("${query.url}")
     private String queryUrl;
 
+    @Value("${connector.url}")
+    private String connectorUrl;
+
     public String getAuditEventUrl() {
         return auditEventUrl;
     }
@@ -52,4 +55,7 @@ public class RuntimeTestsConfigurationProperties {
         return queryUrl;
     }
 
+    public String getConnectorUrl() {
+        return connectorUrl;
+    }
 }

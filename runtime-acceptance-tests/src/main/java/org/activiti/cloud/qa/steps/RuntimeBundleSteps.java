@@ -77,8 +77,13 @@ public class RuntimeBundleSteps {
     }
 
     @Step
-    public CloudProcessInstance startProcess(Map<String, Object> variables) {
-        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY, variables);
+    public CloudProcessInstance startProcess() {
+        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY,  null);
+    }
+
+    @Step
+    public CloudProcessInstance startProcess(String process) {
+        return this.startProcess(process, null);
     }
 
     @Step

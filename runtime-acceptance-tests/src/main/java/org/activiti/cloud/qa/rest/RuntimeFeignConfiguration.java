@@ -30,10 +30,7 @@ import org.activiti.cloud.qa.rest.feign.FeignErrorDecoder;
 import org.activiti.cloud.qa.rest.feign.FeignRestDataClient;
 import org.activiti.cloud.qa.rest.feign.HalDecoder;
 import org.activiti.cloud.qa.rest.feign.OAuth2FeignRequestInterceptor;
-import org.activiti.cloud.qa.service.AuditService;
-import org.activiti.cloud.qa.service.QueryService;
-import org.activiti.cloud.qa.service.RuntimeBundleDiagramService;
-import org.activiti.cloud.qa.service.RuntimeBundleService;
+import org.activiti.cloud.qa.service.*;
 import org.activiti.runtime.conf.CommonModelAutoConfiguration;
 import org.activiti.runtime.conf.TaskModelAutoConfiguration;
 import org.conf.activiti.runtime.ProcessModelAutoConfiguration;
@@ -103,5 +100,14 @@ public class RuntimeFeignConfiguration {
                          new HalDecoder(objectMapper))
                 .target(QueryService.class,
                         runtimeTestsConfigurationProperties.getQueryUrl());
+    }
+
+    @Bean
+    public ConnectorService connectorService() {
+        return FeignRestDataClient
+                .builder(new JacksonEncoder(),
+                        new HalDecoder(objectMapper))
+                .target( ConnectorService.class,
+                        runtimeTestsConfigurationProperties.getConnectorUrl());
     }
 }
