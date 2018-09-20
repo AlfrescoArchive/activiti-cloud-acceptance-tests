@@ -78,7 +78,7 @@ public class RuntimeBundleSteps {
 
     @Step
     public CloudProcessInstance startProcess() {
-        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY,  null);
+        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY);
     }
 
     @Step
