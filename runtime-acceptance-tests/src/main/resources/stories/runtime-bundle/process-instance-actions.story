@@ -39,4 +39,4 @@ Given the user is authenticated as a testuser
 When the user starts a connector process with matching input-variable-name-1 and not matching variable-not-mapped variables
 Then the status of the process is changed to completed
 And the connector receives the matching input-variable-name-1 variable
-And a list of input-variable-name-1,variable-not-mapped,output-variable-name-1 variables was created
+And a list of input-variable-name-1,variable-not-mapped,output-variable-name-1 variables was created and output-no-match was not created

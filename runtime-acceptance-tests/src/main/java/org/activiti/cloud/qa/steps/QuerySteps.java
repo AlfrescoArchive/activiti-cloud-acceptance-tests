@@ -61,12 +61,12 @@ public class QuerySteps {
     }
 
     @Step
-    public PagedResources<CloudProcessInstance> getAllProcessInstances(){
+    public PagedResources<CloudProcessInstance> getAllProcessInstances() {
         return queryService.getAllProcessInstances();
     }
 
     @Step
-    public PagedResources<CloudProcessInstance> getAllProcessInstancesAdmin(){
+    public PagedResources<CloudProcessInstance> getAllProcessInstancesAdmin() {
         return queryService.getAllProcessInstancesAdmin();
     }
 
@@ -87,7 +87,7 @@ public class QuerySteps {
     }
 
     @Step
-    public void checkProcessInstanceHasVariables(String processInstanceId, List<String> variableNames) throws Exception {
+    public void checkProcessInstanceHasVariables(String processInstanceId, List<String> variableNames, List<String> noVariableNames) throws Exception {
 
         await().untilAsserted(() -> {
 
@@ -100,7 +100,14 @@ public class QuerySteps {
 
             //one of the variables should have name matching variableName
             variableNames.forEach(variableName -> assertThat(variableInstances).extracting(VariableInstance::getName).contains(variableName));
+
+
         });
+
+        //after the first await we can assume that now all variables are stored
+        final Collection<CloudVariableInstance> variableInstances = queryService.getProcessInstanceVariables(processInstanceId).getContent();
+
+        noVariableNames.forEach(noVariableName -> assertThat(variableInstances).extracting(VariableInstance::getName).doesNotContain(noVariableName));
     }
 
     @Step
@@ -130,7 +137,7 @@ public class QuerySteps {
     }
 
     @Step
-    public PagedResources<CloudTask> getAllTasks(){
+    public PagedResources<CloudTask> getAllTasks() {
         return queryService.queryAllTasks();
     }
 

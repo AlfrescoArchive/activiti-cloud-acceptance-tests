@@ -16,10 +16,7 @@
 
 package org.activiti.cloud.qa.story;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
@@ -171,15 +168,15 @@ public class ProcessInstanceTasks {
     public void verifyVariableCreated(String variableName) throws Exception {
         List<String> variableNames = new ArrayList<>();
         variableNames.add(variableName);
-        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variableNames);
+        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variableNames, Collections.emptyList());
 
-        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variableNames, VariableEvent.VariableEvents.VARIABLE_CREATED);
-
+        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variableNames, VariableEvent.VariableEvents.VARIABLE_CREATED, Collections.emptyList());
     }
-    @Then("a list of $variables variables was created")
-    public void verifyVariablesCreated(List<String> variables) throws Exception{
-        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variables);
-        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variables, VariableEvent.VariableEvents.VARIABLE_CREATED);
+
+    @Then("a list of $variables variables was created and $noVariables was not created")
+    public void verifyVariablesCreated(List<String> variables, List<String> noVariables) throws Exception{
+        querySteps.checkProcessInstanceHasVariables(processInstance.getId(),variables, noVariables);
+        auditSteps.checkProcessInstanceVariableEvents(processInstance.getId(), variables, VariableEvent.VariableEvents.VARIABLE_CREATED, noVariables);
     }
 
     @When("the user cancel the process")
