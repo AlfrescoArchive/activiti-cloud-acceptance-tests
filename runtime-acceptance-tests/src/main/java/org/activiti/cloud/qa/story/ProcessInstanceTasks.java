@@ -43,6 +43,7 @@ import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WI
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class ProcessInstanceTasks {
 
@@ -140,6 +141,11 @@ public class ProcessInstanceTasks {
     @When("the user completes the task")
     public void completeTask() throws Exception {
         runtimeBundleSteps.completeTask(currentTask.getId());
+    }
+
+    @Then("the user cannot complete the task")
+    public void cannotCompleteTask() throws Exception{
+        runtimeBundleSteps.cannotCompleteTask(currentTask.getId());
     }
 
     @When("the status of the task is $status")

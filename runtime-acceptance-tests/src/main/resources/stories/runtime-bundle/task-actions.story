@@ -57,3 +57,38 @@ And the status of the task is CREATED
 And the user claims a task
 And the user completes the task
 Then the status of the process and tasks is changed to completed
+
+Scenario: cannot complete a task that has already been completed
+Given the user is authenticated as a testuser
+When the user starts a single-task process
+And the user completes the task
+Then the user cannot complete the task
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

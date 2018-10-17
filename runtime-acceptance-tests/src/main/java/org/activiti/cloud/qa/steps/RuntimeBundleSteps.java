@@ -122,6 +122,16 @@ public class RuntimeBundleSteps {
     }
 
     @Step
+    public void cannotCompleteTask(String id) {
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(() -> {
+                    runtimeBundleService
+                            .completeTask(id);
+                }
+        ).withMessageContaining("Unable to find task for the given id: " + id);
+    }
+
+    @Step
     public void deleteProcessInstance(String id) {
         runtimeBundleService.deleteProcess(id);
     }
