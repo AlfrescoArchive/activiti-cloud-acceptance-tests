@@ -41,6 +41,7 @@ import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WI
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY;
+import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProcessInstanceTasks {
@@ -112,6 +113,13 @@ public class ProcessInstanceTasks {
     public void startSingleTaskProcessWithUserCandidates()throws Exception {
         this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY);
     }
+
+    @When("the user starts a single-task process with group candidates")
+    public void startSingleTaskProcessWithGroupCandidates()throws Exception {
+        this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY);
+    }
+
+
 
     @When("the user starts a connector process")
     public void startConnectorProcess() throws Exception {

@@ -45,7 +45,6 @@ import org.springframework.hateoas.Resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.awaitility.Awaitility.await;
 
 /**
  * Runtime bundle steps
@@ -65,6 +64,7 @@ public class RuntimeBundleSteps {
 
     public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessUserCandidate";
 
+    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessGroupCandidates";
 
     @Autowired
     private RuntimeDirtyContextHandler dirtyContextHandler;
