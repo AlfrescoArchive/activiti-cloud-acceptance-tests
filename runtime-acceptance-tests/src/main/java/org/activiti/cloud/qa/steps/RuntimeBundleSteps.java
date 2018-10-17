@@ -52,8 +52,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @EnableRuntimeFeignContext
 public class RuntimeBundleSteps {
 
-    public static final String DEFAULT_PROCESS_INSTANCE_COMMAND_TYPE = "START_PROCESS";
-
     public static final String SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY = "SimpleProcess";
 
     public static final String CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY = "ConnectorProcess";
