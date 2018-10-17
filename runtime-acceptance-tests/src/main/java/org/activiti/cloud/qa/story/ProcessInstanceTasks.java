@@ -19,7 +19,6 @@ package org.activiti.cloud.qa.story;
 import java.util.ArrayList;
 import java.util.List;
 
-import feign.FeignException;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Steps;
 import org.activiti.api.model.shared.event.VariableEvent;
@@ -43,7 +42,6 @@ import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WI
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class ProcessInstanceTasks {
 
@@ -120,7 +118,10 @@ public class ProcessInstanceTasks {
         this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY);
     }
 
-
+    @When("the assignee is $user")
+    public void checkAssignee(String user)throws Exception {
+        assertThat(runtimeBundleSteps.getTaskById(currentTask.getId()).getAssignee()).isEqualTo(user);
+    }
 
     @When("the user starts a connector process")
     public void startConnectorProcess() throws Exception {
@@ -165,6 +166,12 @@ public class ProcessInstanceTasks {
                 break;
         }
 
+    }
+
+    @Then("the task cannot be claimed by $user")
+    public void cannotClaimTask(String user) throws Exception {
+        runtimeBundleSteps.cannotAssignTaskToUser(currentTask.getId(),
+                                            user);
     }
 
     @Then("the status of the process and tasks is changed to completed")

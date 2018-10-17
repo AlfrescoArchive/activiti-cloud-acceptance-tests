@@ -64,7 +64,13 @@ When the user starts a single-task process
 And the user completes the task
 Then the user cannot complete the task
 
-
+Scenario: cannot claim a task that has already been claimed
+Given the user is authenticated as a testuser
+When the user starts a single-task process with user candidates
+And the status of the task is CREATED
+And the user claims a task
+And another user is authenticated as a hruser
+Then the task cannot be claimed by hruser
 
 
 

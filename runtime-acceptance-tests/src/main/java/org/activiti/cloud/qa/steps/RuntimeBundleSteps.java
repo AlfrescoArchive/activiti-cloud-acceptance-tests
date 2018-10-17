@@ -60,7 +60,7 @@ public class RuntimeBundleSteps {
 
     public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY = "SingleTaskProcess";
 
-    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessUserCandidate";
+    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessUserCandidates";
 
     public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessGroupCandidates";
 
@@ -110,6 +110,17 @@ public class RuntimeBundleSteps {
         runtimeBundleService
                 .assignTaskToUser(id,
                                   user);
+    }
+
+    @Step
+    public void cannotAssignTaskToUser(String id,
+                                        String user){
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(() -> {
+                    runtimeBundleService
+                            .assignTaskToUser(id,
+                                              user);
+                }).withMessageContaining("Unable to find task for the given id: " + id);
     }
 
     @Step

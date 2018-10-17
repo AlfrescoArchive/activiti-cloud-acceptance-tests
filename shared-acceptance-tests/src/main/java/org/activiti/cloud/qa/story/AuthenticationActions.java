@@ -20,6 +20,7 @@ import net.thucydides.core.annotations.Steps;
 import org.activiti.cloud.qa.steps.AuthenticationSteps;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 /**
@@ -31,10 +32,13 @@ public class AuthenticationActions {
     private AuthenticationSteps authenticationSteps;
 
     @Given("the user is authenticated as a $authUsername")
+    @When("another user is authenticated as a $authUsername")
     public void authenticateUser(String authUsername) throws Exception{
         authenticationSteps.authenticateUser(authUsername);
         authenticationSteps.ensureUserIsAuthenticated();
     }
+
+
 
 
 
