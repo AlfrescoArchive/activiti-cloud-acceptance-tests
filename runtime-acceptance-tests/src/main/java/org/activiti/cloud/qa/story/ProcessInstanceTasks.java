@@ -133,7 +133,7 @@ public class ProcessInstanceTasks {
         this.startProcessWithTasks("fixSystemFailure");
     }
 
-    @When("the user claims a task")
+    @When("the user claims the task")
     public void claimTask() throws Exception {
         runtimeBundleSteps.assignTaskToUser(currentTask.getId(),
                                             "testuser");
@@ -174,7 +174,7 @@ public class ProcessInstanceTasks {
                                             user);
     }
 
-    @Then("the status of the process and tasks is changed to completed")
+    @Then("the status of the process and the task is changed to completed")
     public void verifyProcessAndTasksStatus() throws Exception {
 
         querySteps.checkProcessInstanceStatus(processInstance.getId(),
