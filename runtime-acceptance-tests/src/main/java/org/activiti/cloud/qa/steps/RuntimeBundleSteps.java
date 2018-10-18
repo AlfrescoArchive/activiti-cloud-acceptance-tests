@@ -86,11 +86,6 @@ public class RuntimeBundleSteps {
     }
 
     @Step
-    public CloudProcessInstance startProcess() {
-        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY);
-    }
-
-    @Step
     public CloudProcessInstance startProcess(String process) {
 
         return dirtyContextHandler.dirty(runtimeBundleService.startProcess(ProcessPayloadBuilder

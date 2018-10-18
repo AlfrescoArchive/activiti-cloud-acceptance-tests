@@ -69,16 +69,12 @@ public class ProcessInstanceTasks {
     }
 
     @When("the user starts a $processName")
-    public void startProcessTest (String processName) throws Exception {
+    public void startProcess(String processName) {
 
-        String processDefinitionKey = "";
+        String processDefinitionKey;
         boolean withTasks = false;
 
         switch(processName){
-            case "simple process":
-                processDefinitionKey = SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
-                withTasks = true;
-                break;
             case "process with variables":
                 processDefinitionKey = PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY;
                 withTasks = true;
@@ -102,6 +98,8 @@ public class ProcessInstanceTasks {
             case "connector process":
                 processDefinitionKey = CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY;
                 break;
+            default:
+                processDefinitionKey = SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
         }
 
         processInstance = runtimeBundleSteps.startProcess(processDefinitionKey);
@@ -116,6 +114,12 @@ public class ProcessInstanceTasks {
         }
 
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
+    }
+
+    @Given("any suspended process instance")
+    public void suspendCurrentProcessInstance() {
+        this.startProcess("any");
+        runtimeBundleSteps.suspendProcessInstance(processInstance.getId());
     }
 
     @When("the assignee is $user")
@@ -222,12 +226,6 @@ public class ProcessInstanceTasks {
     @Then("no diagram is shown")
     public void checkProcessInstanceNoDiagram() throws Exception {
         runtimeBundleSteps.checkProcessInstanceNoDiagram(processInstanceDiagram);
-    }
-
-    @Given("any suspended process instance")
-    public void suspendCurrentProcessInstance() {
-        processInstance = runtimeBundleSteps.startProcess();
-        runtimeBundleSteps.suspendProcessInstance(processInstance.getId());
     }
 
     @When("activate the process")
