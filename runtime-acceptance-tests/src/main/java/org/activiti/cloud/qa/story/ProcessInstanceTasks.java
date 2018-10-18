@@ -127,10 +127,10 @@ public class ProcessInstanceTasks {
         assertThat(runtimeBundleSteps.getTaskById(currentTask.getId()).getAssignee()).isEqualTo(user);
     }
 
-    @When("the user claims the task")
-    public void claimTask() throws Exception {
+    @When("the $user claims the task")
+    public void claimTask(String user) throws Exception {
         runtimeBundleSteps.assignTaskToUser(currentTask.getId(),
-                                            "testuser");
+                                            user);
     }
 
     @When("the user completes the task")
