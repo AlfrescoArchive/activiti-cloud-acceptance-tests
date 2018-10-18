@@ -64,6 +64,8 @@ public class RuntimeBundleSteps {
 
     public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessGroupCandidates";
 
+    public static final String PROCESS_INSTANCE_WITHOUT_GRAPHIC_INFO_DEFINITION_KEY = "fixSystemFailure";
+
     @Autowired
     private RuntimeDirtyContextHandler dirtyContextHandler;
 

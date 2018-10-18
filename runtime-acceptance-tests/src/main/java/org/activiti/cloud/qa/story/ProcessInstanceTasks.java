@@ -41,6 +41,7 @@ import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.SIMPLE_PROCESS_INST
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY;
+import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITHOUT_GRAPHIC_INFO_DEFINITION_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProcessInstanceTasks {
@@ -67,70 +68,59 @@ public class ProcessInstanceTasks {
         querySteps.checkServicesHealth();
     }
 
-    @When("the user starts process '$process' with tasks")
-    public void startProcessWithTasks(String process) throws Exception {
+    @When("the user starts a $processName")
+    public void startProcessTest (String processName) throws Exception {
 
-        processInstance = runtimeBundleSteps.startProcess(process);
+        String processDefinitionKey = "";
+        boolean withTasks = false;
+
+        switch(processName){
+            case "simple process":
+                processDefinitionKey = SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "process with variables":
+                processDefinitionKey = PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "single-task process":
+                processDefinitionKey = PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "single-task process with user candidates":
+                processDefinitionKey = PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "single-task process with group candidates":
+                processDefinitionKey = PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "process without graphic info":
+                processDefinitionKey = PROCESS_INSTANCE_WITHOUT_GRAPHIC_INFO_DEFINITION_KEY;
+                withTasks = true;
+                break;
+            case "connector process":
+                processDefinitionKey = CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY;
+                break;
+        }
+
+        processInstance = runtimeBundleSteps.startProcess(processDefinitionKey);
         assertThat(processInstance).isNotNull();
 
-        List<Task> tasks = new ArrayList<>(
-                runtimeBundleSteps.getTaskByProcessInstanceId(processInstance.getId()));
-        assertThat(tasks).isNotEmpty();
-        currentTask = tasks.get(0);
-        assertThat(currentTask).isNotNull();
+        if(withTasks){
+            List<Task> tasks = new ArrayList<>(
+                    runtimeBundleSteps.getTaskByProcessInstanceId(processInstance.getId()));
+            assertThat(tasks).isNotEmpty();
+            currentTask = tasks.get(0);
+            assertThat(currentTask).isNotNull();
+        }
 
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
-
-    }
-
-    @When("the user starts process '$process'")
-    public void startProcess(String process) throws Exception {
-
-        processInstance = runtimeBundleSteps.startProcess(process);
-
-        assertThat(processInstance).isNotNull();
-        Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
-
-    }
-
-    @When("the user starts a simple process")
-    public void startSimpleProcess() throws Exception {
-        this.startProcessWithTasks(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY);
-    }
-
-    @When("the user starts a process with variables")
-    public void startProcessWithVariables() throws Exception {
-        this.startProcessWithTasks(PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY);
-    }
-
-    @When("the user starts a single-task process")
-    public void startSingleTaskProcess()throws Exception {
-        this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY);
-    }
-
-    @When("the user starts a single-task process with user candidates")
-    public void startSingleTaskProcessWithUserCandidates()throws Exception {
-        this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY);
-    }
-
-    @When("the user starts a single-task process with group candidates")
-    public void startSingleTaskProcessWithGroupCandidates()throws Exception {
-        this.startProcessWithTasks(PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY);
     }
 
     @When("the assignee is $user")
     public void checkAssignee(String user)throws Exception {
         assertThat(runtimeBundleSteps.getTaskById(currentTask.getId()).getAssignee()).isEqualTo(user);
-    }
-
-    @When("the user starts a connector process")
-    public void startConnectorProcess() throws Exception {
-        this.startProcess(CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY);
-    }
-
-    @When("the user starts a process without graphic info")
-    public void startProcessWithoutGraphicInfo() throws Exception {
-        this.startProcessWithTasks("fixSystemFailure");
     }
 
     @When("the user claims the task")
