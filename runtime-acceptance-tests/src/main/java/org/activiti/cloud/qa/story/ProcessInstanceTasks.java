@@ -238,4 +238,10 @@ public class ProcessInstanceTasks {
     public void cannotActivateProcessInstance() {
         runtimeBundleSteps.activateProcessInstance(processInstance.getId());
     }
+
+
+    @Then("the user can get process instances in admin endpoint")
+    public void getAllProcessInstancesAdmin(){
+        assertThat(runtimeBundleSteps.getAllProcessInstancesAdmin()).isNotEmpty();
+    }
 }

@@ -33,3 +33,8 @@ Given the user is authenticated as testuser
 When the user starts a connector process
 Then the status of the process is changed to completed
 And a variable was created with name var1
+
+Scenario: retrieve process instances as an admin
+Given the user is authenticated as hradmin
+When the user starts a process with variables
+Then the user can get process instances in admin endpoint
