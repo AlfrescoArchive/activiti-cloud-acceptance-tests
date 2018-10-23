@@ -38,3 +38,8 @@ Scenario: retrieve process instances as an admin
 Given the user is authenticated as hradmin
 When the user starts a process with variables
 Then the user can get process instances in admin endpoint
+
+Scenario: query process instances as an admin
+Given the user is authenticated as hradmin
+When the user starts a process with variables
+Then the user can query process instances in admin endpoint

@@ -244,4 +244,9 @@ public class ProcessInstanceTasks {
     public void getAllProcessInstancesAdmin(){
         assertThat(runtimeBundleSteps.getAllProcessInstancesAdmin()).isNotEmpty();
     }
+
+    @Then("the user can query process instances in admin endpoint")
+    public void gueryAllProcessInstancesAdmin(){
+        assertThat(querySteps.getAllProcessInstancesAdmin()).isNotEmpty();
+    }
 }
