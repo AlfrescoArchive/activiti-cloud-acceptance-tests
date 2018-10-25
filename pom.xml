@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.activiti.cloud</groupId>
   <artifactId>acceptance-tests-parent</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>7.0.0.Beta2</version>
   <packaging>pom</packaging>
   <modules>
     <module>shared-acceptance-tests</module>
@@ -34,7 +34,7 @@
   </distributionManagement>
   <properties>
     <activiti-cloud.version>7.0.71</activiti-cloud.version>
-    <activiti-cloud-modeling.version>7.0.3</activiti-cloud-modeling.version>
+    <activiti-cloud-modeling.version>7.0.0.Beta2</activiti-cloud-modeling.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <enforcer.skip>true</enforcer.skip>
     <java.version>1.8</java.version>
