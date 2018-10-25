@@ -17,6 +17,7 @@
 package org.activiti.cloud.qa.story;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.serenitybdd.core.Serenity;
@@ -24,8 +25,10 @@ import net.thucydides.core.annotations.Steps;
 import org.activiti.api.model.shared.event.VariableEvent;
 import org.activiti.api.process.model.ProcessInstance;
 import org.activiti.api.process.model.events.ProcessRuntimeEvent;
+import org.activiti.api.runtime.model.impl.ProcessInstanceImpl;
 import org.activiti.api.task.model.Task;
 import org.activiti.api.task.model.events.TaskRuntimeEvent;
+import org.activiti.cloud.api.model.shared.events.CloudRuntimeEvent;
 import org.activiti.cloud.qa.rest.error.ExpectRestNotFound;
 import org.activiti.cloud.qa.steps.AuditSteps;
 import org.activiti.cloud.qa.steps.QuerySteps;
@@ -35,6 +38,8 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import static org.activiti.cloud.qa.helper.Filters.checkEvents;
+import static org.activiti.cloud.qa.helper.Filters.checkProcessInstances;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY;
 import static org.activiti.cloud.qa.steps.RuntimeBundleSteps.SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
@@ -237,5 +242,23 @@ public class ProcessInstanceTasks {
     @ExpectRestNotFound("Unable to find process instance for the given id")
     public void cannotActivateProcessInstance() {
         runtimeBundleSteps.activateProcessInstance(processInstance.getId());
+    }
+
+    @Then("the user can get events for process with variables instances in admin endpoint")
+    public void checkIfEventsFromProcessesWithVariablesArePresentAdmin(){
+        //TODO some refactoring after fixing the behavior of the /admin/v1/events?search=entityId:UUID endpoint
+        Collection<CloudRuntimeEvent> filteredCollection = checkEvents(auditSteps.getEventsByEntityIdAdmin(Serenity.sessionVariableCalled("processInstanceId")), PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY);
+        assertThat(filteredCollection).isNotEmpty();
+        assertThat(((ProcessInstanceImpl)filteredCollection.iterator().next().getEntity()).getProcessDefinitionKey()).isEqualTo(PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY);
+    }
+
+    @Then("the user can query process with variables instances in admin endpoints")
+    public void checkIfProcessWithVariablesArePresentQueryAdmin(){
+        assertThat(checkProcessInstances(querySteps.getAllProcessInstancesAdmin(),PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY)).isNotEmpty();
+    }
+
+    @Then("the user can get process with variables instances in admin endpoint")
+    public void checkIfProcessWithVariablesArePresentAdmin(){
+        assertThat(checkProcessInstances(runtimeBundleSteps.getAllProcessInstancesAdmin(), PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY)).isNotEmpty();
     }
 }
