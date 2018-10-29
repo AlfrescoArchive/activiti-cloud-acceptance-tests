@@ -22,8 +22,11 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import feign.FeignException;
 import net.thucydides.core.annotations.Step;
+import org.activiti.api.process.model.ProcessInstance;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
+import org.activiti.api.task.model.Task;
 import org.activiti.api.task.model.builders.TaskPayloadBuilder;
 import org.activiti.api.task.model.payloads.CreateTaskPayload;
 import org.activiti.cloud.api.process.model.CloudProcessInstance;
@@ -57,6 +60,14 @@ public class RuntimeBundleSteps {
 
     public static final String CONNECTOR_PROCESS_INSTANCE_WITH_VARIABLES_DEFINITION_KEY = "ConnectorProcessWithActions";
 
+    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_DEFINITION_KEY = "SingleTaskProcess";
+
+    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_USER_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessUserCandidates";
+
+    public static final String PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_DEFINITION_KEY = "SingleTaskProcessGroupCandidates";
+
+    public static final String PROCESS_INSTANCE_WITHOUT_GRAPHIC_INFO_DEFINITION_KEY = "fixSystemFailure";
+
     @Autowired
     private RuntimeDirtyContextHandler dirtyContextHandler;
 
@@ -74,11 +85,6 @@ public class RuntimeBundleSteps {
     @Step
     public Map<String, Object> health() {
         return runtimeBundleService.health();
-    }
-
-    @Step
-    public CloudProcessInstance startProcess() {
-        return this.startProcess(SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY);
     }
 
     @Step
@@ -112,10 +118,31 @@ public class RuntimeBundleSteps {
     }
 
     @Step
+    public void cannotAssignTaskToUser(String id,
+                                        String user){
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(() -> {
+                    runtimeBundleService
+                            .assignTaskToUser(id,
+                                              user);
+                }).withMessageContaining("Unable to find task for the given id: " + id);
+    }
+
+    @Step
     public void completeTask(String id) {
 
         runtimeBundleService
                 .completeTask(id);
+    }
+
+    @Step
+    public void cannotCompleteTask(String id) {
+        assertThatExceptionOfType(Exception.class)
+                .isThrownBy(() -> {
+                    runtimeBundleService
+                            .completeTask(id);
+                }
+        ).withMessageContaining("Unable to find task for the given id: " + id);
     }
 
     @Step
@@ -225,5 +252,20 @@ public class RuntimeBundleSteps {
     @Step
     public PagedResources<CloudProcessInstance> getAllProcessInstancesAdmin(){
         return runtimeBundleService.getAllProcessInstancesAdmin();
+    }
+
+    @Step
+    public void checkTaskStatus(String id, Task.TaskStatus status){
+         assertThat(runtimeBundleService.getTaskById(id).getStatus()).isEqualTo(status);
+    }
+
+    @Step
+    public void checkProcessInstanceIsNotPresent(String id){
+        try{
+            runtimeBundleService.getProcessInstance(id);
+
+        }catch (FeignException exception) {
+            assertThat(exception.getMessage()).contains("Unable to find process instance for the given id:'" + id+ "'");
+        }
     }
 }
