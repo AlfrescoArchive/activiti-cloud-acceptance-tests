@@ -295,4 +295,19 @@ public class ProcessInstanceTasks {
                 .extracting(field)
                 .contains(value);
     }
+
+    @When("the user set a process instance name $myProcessInstanceName and starts the process $processName")
+    public void startProcessWithProcessInstanceName(String myProcessInstanceName,
+                                                    String processName) {
+        processInstance = runtimeBundleSteps.startProcessWithProcessInstanceName(processDefinitionKeyMatcher(processName),
+                                                                                 myProcessInstanceName);
+    }
+
+    @Then("verify the process instance name is $myProcessInstanceName")
+    public void verifyTheProcessInstanceNameIsTheOneSupplied(String myProcessInstanceName) {
+        runtimeBundleSteps.checkProcessInstanceName(processInstance.getId(),
+                                                    myProcessInstanceName);
+        querySteps.checkProcessInstanceName(processInstance.getId(),
+                                            myProcessInstanceName);
+    }
 }

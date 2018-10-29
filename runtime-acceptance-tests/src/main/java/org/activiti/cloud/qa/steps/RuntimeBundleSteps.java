@@ -94,6 +94,16 @@ public class RuntimeBundleSteps {
     }
 
     @Step
+    public CloudProcessInstance startProcessWithProcessInstanceName(String process,
+                                                                    String processName) {
+        return dirtyContextHandler.dirty(runtimeBundleService.startProcess(ProcessPayloadBuilder
+                                                                                   .start()
+                                                                                   .withProcessInstanceName(processName)
+                                                                                   .withProcessDefinitionKey(process)
+                                                                                   .build()));
+    }
+
+    @Step
     public Collection<CloudTask> getTaskByProcessInstanceId(String processInstanceId) {
         return runtimeBundleService
                 .getProcessInstanceTasks(processInstanceId).getContent();
@@ -261,6 +271,12 @@ public class RuntimeBundleSteps {
         }catch (FeignException exception) {
             assertThat(exception.getMessage()).contains("Unable to find process instance for the given id:'" + id+ "'");
         }
+    }
+
+    @Step
+    public void checkProcessInstanceName(String processInstanceId,
+                                         String processInstanceName) {
+        assertThat(runtimeBundleService.getProcessInstance(processInstanceId).getName()).isEqualTo(processInstanceName);
     }
 
     @Step
