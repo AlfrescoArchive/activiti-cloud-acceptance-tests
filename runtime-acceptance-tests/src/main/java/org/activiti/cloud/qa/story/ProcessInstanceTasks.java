@@ -173,13 +173,7 @@ public class ProcessInstanceTasks {
                                             user);
         //the claimed task cannot/shouldn't be found by query
         Collection <? extends Task> tasks = querySteps.getAllTasks().getContent();
-        Task foundTask = null;
-        for(Task t : tasks) {
-            if(t.getId().equals(currentTask.getId())) {
-                foundTask = currentTask;
-            }
-        }
-        assertThat(foundTask).isNull();
+        assertThat(tasks).extracting("id").doesNotContain(currentTask.getId());
     }
 
     @Then("the status of the process and the task is changed to completed")
