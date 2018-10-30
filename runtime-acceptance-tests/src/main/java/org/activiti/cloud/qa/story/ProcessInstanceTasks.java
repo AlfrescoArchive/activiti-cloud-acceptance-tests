@@ -103,6 +103,9 @@ public class ProcessInstanceTasks {
             case "connector process":
                 processDefinitionKey = CONNECTOR_PROCESS_INSTANCE_DEFINITION_KEY;
                 break;
+            case "single-task process with group candidates for test group":
+                processDefinitionKey = "SingleTaskProcessGroupCandidatesTestGroup";
+                break;
             default:
                 processDefinitionKey = SIMPLE_PROCESS_INSTANCE_DEFINITION_KEY;
         }

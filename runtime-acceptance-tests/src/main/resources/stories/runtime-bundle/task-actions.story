@@ -72,7 +72,12 @@ And the testuser claims the task
 And another user is authenticated as hruser
 Then the task cannot be claimed by hruser
 
-
+Scenario: cannot claim a task that belongs to different candidate group
+Given the user is authenticated as testuser
+When the user starts a single-task process with group candidates for test group
+And the testuser claims the task
+And another user is authenticated as hruser
+Then the task cannot be claimed by hruser
 
 
 
