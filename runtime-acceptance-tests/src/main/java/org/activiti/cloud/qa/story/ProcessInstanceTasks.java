@@ -212,14 +212,14 @@ public class ProcessInstanceTasks {
 
     }
 
-    @When("the user cancel the process")
-    @Alias("cancel the process")
-    public void cancelCurrentProcessInstance() throws Exception {
+    @When("the user deletes the process")
+    public void deleteCurrentProcessInstance() throws Exception {
         runtimeBundleSteps.deleteProcessInstance(processInstance.getId());
     }
 
-    @Then("the process instance is cancelled")
+    @Then("the process instance is deleted")
     public void verifyProcessInstanceIsDeleted() throws Exception {
+        //TODO change to DELETED status and PROCESS_DELETED event when RB is ready
         runtimeBundleSteps.checkProcessInstanceNotFound(processInstance.getId());
         querySteps.checkProcessInstanceStatus(processInstance.getId(),
                                               ProcessInstance.ProcessInstanceStatus.CANCELLED);

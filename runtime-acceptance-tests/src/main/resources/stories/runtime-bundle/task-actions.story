@@ -20,8 +20,8 @@ Then the task is created and the status is assigned
 Scenario: delete a standalone task
 Given the user is authenticated as testuser
 And the user creates a standalone task
-When the user cancels the standalone task
-Then the standalone task is cancelled
+When the user deletes the standalone task
+Then the standalone task is deleted
 
 Scenario: create a subtask
 Given the user is authenticated as testuser

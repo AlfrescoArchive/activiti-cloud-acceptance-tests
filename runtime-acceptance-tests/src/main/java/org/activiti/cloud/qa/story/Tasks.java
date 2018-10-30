@@ -68,16 +68,17 @@ public class Tasks {
                                    Task.TaskStatus.ASSIGNED);
     }
 
-    @When("the user cancels the standalone task")
-    public void cancelCurrentTask() {
+    @When("the user deletes the standalone task")
+    public void deleteCurrentTask() {
         runtimeBundleSteps.deleteTask(newTask.getId());
     }
 
-    @Then("the standalone task is cancelled")
-    public void checkTaskIsCancelled() throws Exception {
+    @Then("the standalone task is deleted")
+    public void checkTaskIsDeleted() throws Exception {
         runtimeBundleSteps.checkTaskNotFound(newTask.getId());
         auditSteps.checkTaskDeletedEvent(newTask.getId());
         querySteps.checkTaskStatus(newTask.getId(),
+                                   //TODO change to DELETED when RB is ready
                                    Task.TaskStatus.CANCELLED);
     }
 
