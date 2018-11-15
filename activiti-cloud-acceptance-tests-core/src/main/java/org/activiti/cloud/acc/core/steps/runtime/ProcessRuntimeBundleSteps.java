@@ -11,6 +11,7 @@ import org.activiti.cloud.acc.core.services.runtime.ProcessRuntimeService;
 import org.activiti.cloud.acc.core.services.runtime.diagram.ProcessRuntimeDiagramService;
 import org.activiti.cloud.api.process.model.CloudProcessInstance;
 import org.activiti.cloud.api.task.model.CloudTask;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedResources;
 
@@ -49,6 +50,8 @@ public class ProcessRuntimeBundleSteps {
 
         if(variables){
             payload.withVariable("test-variable-name", "test-variable-value");
+            payload.withVariable("test-json-variable-name","\"{ \\\"test-json-variable-element1\\\":\\\"test-json-variable-value1\\\"}\"");
+            payload.withVariable("test-long-json-variable-name","{ \"verylongjson\":\""+ StringUtils.repeat("a", 4000)+"\"}");
         }
 
         return dirtyContextHandler.dirty(processRuntimeService
