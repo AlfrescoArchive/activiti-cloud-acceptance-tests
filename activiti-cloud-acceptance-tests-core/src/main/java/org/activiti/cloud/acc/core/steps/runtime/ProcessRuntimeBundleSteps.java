@@ -1,5 +1,6 @@
 package org.activiti.cloud.acc.core.steps.runtime;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import net.thucydides.core.annotations.Step;
 import org.activiti.api.process.model.ProcessDefinition;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedResources;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -34,13 +36,16 @@ public class ProcessRuntimeBundleSteps {
     @Autowired
     private ProcessRuntimeDiagramService processRuntimeDiagramService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Step
     public void checkServicesHealth() {
         assertThat(processRuntimeService.isServiceUp()).isTrue();
     }
 
     @Step
-    public CloudProcessInstance startProcess(String process, boolean variables ) {
+    public CloudProcessInstance startProcess(String process, boolean variables ) throws IOException {
 
         StartProcessPayloadBuilder payload = ProcessPayloadBuilder
                 .start()
@@ -50,8 +55,8 @@ public class ProcessRuntimeBundleSteps {
 
         if(variables){
             payload.withVariable("test-variable-name", "test-variable-value");
-            payload.withVariable("test-json-variable-name","\"{ \\\"test-json-variable-element1\\\":\\\"test-json-variable-value1\\\"}\"");
-            payload.withVariable("test-long-json-variable-name","{ \"verylongjson\":\""+ StringUtils.repeat("a", 4000)+"\"}");
+            payload.withVariable("test-json-variable-name",objectMapper.readTree("\"{ \\\"test-json-variable-element1\\\":\\\"test-json-variable-value1\\\"}\""));
+            payload.withVariable("test-long-json-variable-name",objectMapper.readTree("{ \"verylongjson\":\""+ StringUtils.repeat("a", 4000)+"\"}"));
         }
 
         return dirtyContextHandler.dirty(processRuntimeService
