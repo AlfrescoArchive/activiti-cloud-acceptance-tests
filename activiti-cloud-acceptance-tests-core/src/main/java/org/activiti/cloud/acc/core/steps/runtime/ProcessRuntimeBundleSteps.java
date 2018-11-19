@@ -55,7 +55,7 @@ public class ProcessRuntimeBundleSteps {
 
         if(variables){
             payload.withVariable("test-variable-name", "test-variable-value");
-            payload.withVariable("test-json-variable-name",objectMapper.readTree("\"{ \\\"test-json-variable-element1\\\":\\\"test-json-variable-value1\\\"}\""));
+            payload.withVariable("test-json-variable-name",objectMapper.readTree("{ \"test-json-variable-element1\":\"test-json-variable-value1\"}"));
             payload.withVariable("test-long-json-variable-name",objectMapper.readTree("{ \"verylongjson\":\""+ StringUtils.repeat("a", 4000)+"\"}"));
         }
 
