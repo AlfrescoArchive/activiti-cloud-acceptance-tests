@@ -30,7 +30,7 @@ public class ProcessDefinitionRegistry {
             put("PROCESS_INSTANCE_WITH_SINGLE_TASK_AND_GROUP_CANDIDATES_FOR_TESTGROUP","singletask-b6095889-6177-4b73-b3d9-316e47749a36");
             put("SUB_PROCESS_INSTANCE_WITH_TASK","subprocess-970cb8df-2d4c-482b-a7f8-c19a983c2ef2");
             put("Process with Generic BPMN Task","processwit-c6fd1b26-0d64-47f2-8d04-0b70764444a7");
-            put("SERVICE_TASK_WITH_IMPLEMENTATION", "servicetas-820b2020-968d-4d34-bac4-5769192674f2");
+            put("ServiceTask with Implementation", "servicetas-820b2020-968d-4d34-bac4-5769192674f2");
     }};
 
     private static final HashMap <String, String> processWithNoTasksDefinitionKeys = new HashMap<String, String>(){{
