@@ -15,7 +15,6 @@ public class ProcessOperations {
     //TODO: change the reference to this method once the previous one is deleted
     @When("the user starts a process called $processName")
     public void startProcess(String processName) throws IOException {
-
         ProcessInstance processInstance = processRuntimeBundleSteps.startProcess(
                 processName, false);
 
@@ -28,5 +27,11 @@ public class ProcessOperations {
                 processName, true);
 
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
+    }
+
+    @When("the user deletes the process instance")
+    public void deleteProcess(){
+        String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
+        processRuntimeBundleSteps.deleteProcessInstance(processInstanceId);
     }
 }
