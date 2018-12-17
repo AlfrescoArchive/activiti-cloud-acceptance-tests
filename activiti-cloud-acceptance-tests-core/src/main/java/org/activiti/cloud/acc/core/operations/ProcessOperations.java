@@ -6,7 +6,6 @@ import org.activiti.api.process.model.ProcessInstance;
 import org.jbehave.core.annotations.When;
 import org.activiti.cloud.acc.core.steps.runtime.ProcessRuntimeBundleSteps;
 import java.io.IOException;
-import static org.activiti.cloud.acc.core.helper.ProcessDefinitionRegistry.processDefinitionKeyMatcher;
 
 public class ProcessOperations {
 
