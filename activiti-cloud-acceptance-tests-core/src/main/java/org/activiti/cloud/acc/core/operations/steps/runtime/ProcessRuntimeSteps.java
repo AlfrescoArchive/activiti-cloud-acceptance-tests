@@ -35,9 +35,11 @@ public class ProcessRuntimeSteps {
 
         StartProcessPayloadBuilder payload = ProcessPayloadBuilder
                 .start()
-                .withProcessDefinitionKey(processDefinitionName);
+                .withProcessDefinitionKey(processDefinitionName)
+                .withProcessInstanceName("processInstanceName")
+                .withBusinessKey("businessKey");
 
-        if(Serenity.sessionVariableCalled("variables")){
+        if(Serenity.sessionVariableCalled("variables") != null){
             payload.withVariable("test-variable-name", "test-variable-value");
         }
 

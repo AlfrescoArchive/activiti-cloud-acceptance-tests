@@ -196,7 +196,7 @@ public class ProcessAssertions {
             assertThat(events).isNotEmpty();
             assertThat(events)
                     .extracting(CloudRuntimeEvent::getEventType)
-                    .containsExactlyInAnyOrder(
+                    .contains(
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_SUSPENDED);
         });
     }
