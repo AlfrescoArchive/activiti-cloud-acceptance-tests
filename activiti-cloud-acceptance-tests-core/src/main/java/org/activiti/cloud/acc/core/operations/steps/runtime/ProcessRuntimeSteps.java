@@ -4,7 +4,6 @@ import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
 import org.activiti.api.process.model.builders.StartProcessPayloadBuilder;
-import org.activiti.cloud.acc.core.registry.ProcessRegistry;
 import org.activiti.cloud.acc.core.rest.RuntimeDirtyContextHandler;
 import org.activiti.cloud.acc.core.rest.feign.EnableRuntimeFeignContext;
 import org.activiti.cloud.acc.core.services.runtime.ProcessRuntimeService;
@@ -26,9 +25,6 @@ public class ProcessRuntimeSteps {
     @Autowired
     private ProcessRuntimeDiagramService processRuntimeDiagramService;
 
-    @Autowired
-    private ProcessRegistry processRegistry;
-
     @Step
     public void checkServicesHealth() {
         assertThat(processRuntimeService.isServiceUp()).isTrue();
@@ -39,7 +35,7 @@ public class ProcessRuntimeSteps {
 
         StartProcessPayloadBuilder payload = ProcessPayloadBuilder
                 .start()
-                .withProcessDefinitionKey(processRegistry.getProcessDefinitionKey(processDefinitionName));
+                .withProcessDefinitionKey(processDefinitionName);
 
         if(Serenity.sessionVariableCalled("variables")){
             payload.withVariable("test-variable-name", "test-variable-value");
