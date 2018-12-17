@@ -186,6 +186,22 @@ public class ProcessAssertions {
                 .hasMessageContaining("Unable to find process instance for the given id");
     }
 
+    @Then("the events are as expected for the suspension of UserTask with no User or Group Assignment")
+    public void assertThatEventsAreAsExpectedForProcessWithUserTaskWithNoAssignmentsWhenSuspended() {
+
+        String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
+
+        await().untilAsserted(() -> {
+            Collection<CloudRuntimeEvent> events = auditSteps.getEventsByEntityId(processInstanceId);
+            assertThat(events).isNotEmpty();
+            assertThat(events)
+                    .extracting(CloudRuntimeEvent::getEventType)
+                    .containsExactlyInAnyOrder(
+                            ProcessRuntimeEvent.ProcessEvents.PROCESS_SUSPENDED);
+        });
+    }
+
+
 
 
 
