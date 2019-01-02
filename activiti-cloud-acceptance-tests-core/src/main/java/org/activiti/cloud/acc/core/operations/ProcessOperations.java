@@ -14,7 +14,7 @@ public class ProcessOperations {
     private ProcessRuntimeSteps processRuntimeSteps;
 
     @When("the user starts a process called $processDefinitionName")
-    public void startProcessInstance(String processDefinitionName) throws IOException {
+    public void startProcessInstance(String processDefinitionName) throws IOException{
         ProcessInstance processInstance = processRuntimeSteps.startProcess(processDefinitionName);
 
         Serenity.setSessionVariable("processInstanceId").to(processInstance.getId());
