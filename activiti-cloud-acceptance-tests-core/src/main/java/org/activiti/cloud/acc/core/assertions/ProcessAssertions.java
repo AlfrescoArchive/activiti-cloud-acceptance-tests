@@ -52,11 +52,10 @@ public class ProcessAssertions {
 
         String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
 
-        //TODO: uncomment processInstanceName check once the issue is solved
         await().untilAsserted(() -> {
             ProcessInstance queryProcessInstance = processQuerySteps.getProcessInstance(processInstanceId);
             assertThat(queryProcessInstance.getBusinessKey()).isEqualTo("businessKey");
-            //assertThat(queryProcessInstance.getName()).isEqualTo("processInstanceName");
+            assertThat(queryProcessInstance.getName()).isEqualTo("processInstanceName");
         });
     }
 
@@ -66,7 +65,6 @@ public class ProcessAssertions {
         String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
 
         await().untilAsserted(() -> {
-            //TODO: uncomment the SequenceFlowTakenEvent once the issue is solved
             Collection<CloudRuntimeEvent> events = auditSteps.getEventsByEntityId(processInstanceId);
             assertThat(events).isNotEmpty();
             assertThat(events)
@@ -76,7 +74,7 @@ public class ProcessAssertions {
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_COMPLETED);
@@ -89,7 +87,6 @@ public class ProcessAssertions {
         String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
 
         await().untilAsserted(() -> {
-            //TODO: uncomment the SequenceFlowTakenEvent and VariableCreated once the issues are solved
             Collection<CloudRuntimeEvent> events = auditSteps.getEventsByEntityId(processInstanceId);
             assertThat(events).isNotEmpty();
             assertThat(events)
@@ -97,10 +94,10 @@ public class ProcessAssertions {
                     .containsExactlyInAnyOrder(
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_CREATED,
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_STARTED,
-                            //VariableEvent.VariableEvents.VARIABLE_CREATED,
+                            VariableEvent.VariableEvents.VARIABLE_CREATED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_COMPLETED);
@@ -113,7 +110,6 @@ public class ProcessAssertions {
         String processInstanceId = Serenity.sessionVariableCalled("processInstanceId");
 
         await().untilAsserted(() -> {
-            //TODO: uncomment the SequenceFlowTakenEvent and VariableCreated once the issues are solved
             Collection<CloudRuntimeEvent> events = auditSteps.getEventsByEntityId(processInstanceId);
             assertThat(events).isNotEmpty();
             assertThat(events)
@@ -123,10 +119,10 @@ public class ProcessAssertions {
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_COMPLETED);
@@ -148,7 +144,7 @@ public class ProcessAssertions {
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED);
         });
     }
@@ -168,7 +164,7 @@ public class ProcessAssertions {
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
-                            //BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
+                            BPMNSequenceFlowTakenEvent.SequenceFlowEvents.SEQUENCE_FLOW_TAKEN,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
                             BPMNActivityEvent.ActivityEvents.ACTIVITY_CANCELLED,
                             ProcessRuntimeEvent.ProcessEvents.PROCESS_CANCELLED);
