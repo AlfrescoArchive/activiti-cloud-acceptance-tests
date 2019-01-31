@@ -10,11 +10,10 @@ import org.springframework.hateoas.PagedResources;
 public interface ProcessRuntimeAdminService extends BaseService {
 
     @RequestLine("GET /admin/v1/process-instances")
-    @Headers("Content-Type: application/json")
+    @Headers("Accept: application/hal+json;charset=UTF-8")
     PagedResources<CloudProcessInstance> getProcessInstances();
     
     @RequestLine("DELETE /admin/v1/process-instances/{id}")
-    @Headers("Content-Type: application/json")
     void deleteProcess(@Param("id") String id);
 
 }

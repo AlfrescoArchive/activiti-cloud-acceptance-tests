@@ -26,13 +26,11 @@ public interface TaskRuntimeAdminService extends BaseService {
                          UpdateTaskPayload updateTaskPayload);
     
     @RequestLine("POST /admin/v1/{taskId}/assign")
+    @Headers("Content-Type: application/json")
     CloudTask assign(@Param("taskId") String taskId,
                      AssignTaskPayload assignTaskPayload);
     
     @RequestLine("GET /admin/v1/tasks")
-    @Headers({
-            "Content-Type: application/json",
-            "Accept: application/hal+json;charset=UTF-8"
-    })
+    @Headers("Accept: application/hal+json;charset=UTF-8")
     PagedResources<CloudTask> getTasks();
 }
