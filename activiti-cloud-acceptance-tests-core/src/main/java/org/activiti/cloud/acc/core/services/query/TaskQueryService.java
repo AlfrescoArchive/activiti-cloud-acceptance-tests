@@ -1,4 +1,4 @@
-package org.activiti.cloud.acc.core.services.query;
+package org.activiti.cloud.acc.core.services.query; 
 
 import feign.Headers;
 import feign.Param;
