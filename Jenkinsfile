@@ -30,7 +30,7 @@ pipeline {
       }
       stage('Build Release') {
         when {
-          branch 'develop'
+          branch '7.0.x'
         }
         steps {
           container('maven') {
