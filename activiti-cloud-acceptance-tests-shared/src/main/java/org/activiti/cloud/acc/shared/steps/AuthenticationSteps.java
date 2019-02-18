@@ -22,6 +22,7 @@ import org.activiti.cloud.acc.shared.model.AuthToken;
 import org.activiti.cloud.acc.shared.rest.TokenHolder;
 import org.activiti.cloud.acc.shared.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,7 +32,8 @@ import static org.assertj.core.api.Assertions.*;
 @EnableFeignContext
 public class AuthenticationSteps {
 
-    private static final String AUTH_CLIENT_ID = "activiti";
+    @Value("${client:activiti}")
+    private String AUTH_CLIENT_ID;
     private static final String AUTH_GRANT_TYPE = "password";
     private static String AUTH_PASSWORD = "password";
 
