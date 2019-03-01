@@ -6,6 +6,9 @@ import feign.RequestLine;
 import org.activiti.cloud.acc.shared.service.BaseService;
 import org.activiti.cloud.api.task.model.CloudTask;
 import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resources;
+
+import java.util.function.Predicate;
 
 public interface TaskQueryAdminService extends BaseService {
     
@@ -24,4 +27,7 @@ public interface TaskQueryAdminService extends BaseService {
     @RequestLine("GET /admin/v1/tasks?standalone=true&sort=createdDate,desc&sort=id,desc")
     @Headers("Accept: application/hal+json;charset=UTF-8")
     PagedResources<CloudTask> getStandaloneTasks();
+
+    @RequestLine("DELETE /admin/clean-up/v1/tasks")
+    Resources<CloudTask> deleteTasks();
 }

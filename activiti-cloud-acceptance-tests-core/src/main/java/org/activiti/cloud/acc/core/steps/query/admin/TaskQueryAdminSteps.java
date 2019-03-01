@@ -8,6 +8,7 @@ import org.activiti.cloud.acc.core.services.query.admin.TaskQueryAdminService;
 import org.activiti.cloud.api.task.model.CloudTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resources;
 
 @EnableRuntimeFeignContext
 public class TaskQueryAdminSteps {
@@ -41,6 +42,10 @@ public class TaskQueryAdminSteps {
     public PagedResources<CloudTask> getStandaloneTasks(){
         return taskQueryAdminService.getStandaloneTasks();
     }
-    
+
+    @Step
+    public Resources<CloudTask> deleteTasks(){
+        return taskQueryAdminService.deleteTasks();
+    }
     
 }
