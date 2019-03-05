@@ -57,7 +57,9 @@ pipeline {
             sh 'export VERSION=`cat VERSION`' 
             sh "updatebot version"
             sh "updatebot push-version --kind maven org.activiti.cloud.acc:activiti-cloud-acceptance-tests-dependencies \$(cat VERSION)"
-            sh "updatebot update --merge false"
+            sh "rm -rf .updatebot-repos/"
+            sh "sleep $[ ( $RANDOM % 10 )  + 1 ]s"
+            sh "updatebot push-version --kind maven org.activiti.cloud.acc:activiti-cloud-acceptance-tests-dependencies \$(cat VERSION)"
           }
         }
       }
