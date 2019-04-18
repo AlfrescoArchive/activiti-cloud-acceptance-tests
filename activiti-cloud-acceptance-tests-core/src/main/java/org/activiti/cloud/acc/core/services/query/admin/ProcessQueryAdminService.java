@@ -7,6 +7,7 @@ import org.activiti.cloud.api.process.model.CloudProcessInstance;
 import org.activiti.cloud.acc.shared.service.BaseService;
 import org.activiti.cloud.api.task.model.CloudTask;
 import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 import java.util.function.Predicate;
@@ -21,6 +22,6 @@ public interface ProcessQueryAdminService extends BaseService {
     @Headers("Content-Type: application/json")
     PagedResources<CloudProcessInstance> getProcessInstances();
 
-    @RequestLine("DELETE /admin/clean-up/v1/process-instances")
-    Resources<CloudProcessInstance> deleteProcessInstances();
+    @RequestLine("DELETE /admin/v1/process-instances")
+    Resources<Resource<CloudProcessInstance>> deleteProcessInstances();
 }
