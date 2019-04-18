@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.activiti.cloud.build</groupId>
     <artifactId>activiti-cloud-parent</artifactId>
-    <version>7.1.4</version>
+    <version>7.1.7</version>
     <relativePath/>
   </parent>
   <groupId>org.activiti.cloud.acc</groupId>
@@ -18,6 +18,7 @@
     <module>activiti-cloud-acceptance-tests-dependencies</module>
     <module>activiti-cloud-acceptance-tests-shared</module>
     <module>activiti-cloud-acceptance-tests-core</module>
+    <module>activiti-cloud-acceptance-tests-modeling</module>
   </modules>
   <distributionManagement>
     <repository>
@@ -27,7 +28,7 @@
     </repository>
   </distributionManagement>
   <properties>
-    <activiti-cloud-api.version>7.1.10</activiti-cloud-api.version>
+    <activiti-cloud-api.version>7.1.19</activiti-cloud-api.version>
     <activiti-cloud-acceptance-tests.version>${project.version}</activiti-cloud-acceptance-tests.version>
     <serenity.version>1.9.6</serenity.version>
     <serenity-jbehave.version>1.38.0</serenity-jbehave.version>
@@ -37,10 +38,24 @@
     <feign-form.version>3.5.0</feign-form.version>
     <awaitility.version>3.1.1</awaitility.version>
     <batik.version>1.10</batik.version>
+    <!--<activiti-cloud-services-org-api.version>7.1.24</activiti-cloud-services-org-api.version>-->
+    <activiti-cloud-modeling.version>7.1.44</activiti-cloud-modeling.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.activiti.cloud.dependencies</groupId>
+        <artifactId>activiti-cloud-modeling-dependencies</artifactId>
+        <version>${activiti-cloud-modeling.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <!--<dependency>-->
+        <!--<groupId>org.activiti.cloud.modeling</groupId>-->
+        <!--<artifactId>activiti-cloud-services-org-api</artifactId>-->
+        <!--<version>${activiti-cloud-services-org-api.version}</version>-->
+      <!--</dependency>-->
       <dependency>
         <groupId>org.awaitility</groupId>
         <artifactId>awaitility</artifactId>

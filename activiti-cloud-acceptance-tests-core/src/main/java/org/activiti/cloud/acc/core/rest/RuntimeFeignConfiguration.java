@@ -39,12 +39,14 @@ import org.activiti.cloud.acc.core.services.runtime.TaskRuntimeService;
 import org.activiti.cloud.acc.core.services.runtime.admin.ProcessRuntimeAdminService;
 import org.activiti.cloud.acc.core.services.runtime.admin.ProcessVariablesRuntimeAdminService;
 import org.activiti.cloud.acc.core.services.runtime.admin.TaskRuntimeAdminService;
+import org.activiti.cloud.acc.core.services.runtime.admin.TaskVariablesRuntimeAdminService;
 import org.activiti.cloud.acc.core.services.runtime.diagram.ProcessRuntimeDiagramService;
 import org.activiti.cloud.acc.shared.rest.feign.FeignConfiguration;
 import org.activiti.cloud.acc.shared.rest.feign.FeignErrorDecoder;
 import org.activiti.cloud.acc.shared.rest.feign.FeignRestDataClient;
 import org.activiti.cloud.acc.shared.rest.feign.HalDecoder;
 import org.activiti.cloud.acc.shared.rest.feign.OAuth2FeignRequestInterceptor;
+import org.activiti.cloud.acc.shared.service.SwaggerService;
 import org.activiti.cloud.api.model.shared.impl.conf.CloudCommonModelAutoConfiguration;
 import org.activiti.cloud.api.process.model.impl.conf.CloudProcessModelAutoConfiguration;
 import org.activiti.cloud.api.task.model.impl.conf.CloudTaskModelAutoConfiguration;
@@ -211,6 +213,39 @@ public class RuntimeFeignConfiguration {
                 .builder(new feign.codec.Encoder.Default(),
                          new feign.codec.Decoder.Default())
                 .target(ProcessModelQueryAdminService.class, runtimeTestsConfigurationProperties.getQueryUrl());
+    }
+
+    @Bean
+    public TaskVariablesRuntimeAdminService taskVariablesRuntimeAdminService(){
+        return FeignRestDataClient
+                .builder(new JacksonEncoder(objectMapper),
+                         new HalDecoder(objectMapper))
+                .target(TaskVariablesRuntimeAdminService.class,
+                        runtimeTestsConfigurationProperties.getRuntimeBundleUrl());
+    }
+
+    @Bean
+    public SwaggerService runtimeBundleSwaggerService(){
+        return FeignRestDataClient
+                .builder(new feign.codec.Encoder.Default(),
+                         new feign.codec.Decoder.Default())
+                .target(SwaggerService.class, runtimeTestsConfigurationProperties.getRuntimeBundleUrl());
+    }
+
+    @Bean
+    public SwaggerService querySwaggerService(){
+        return FeignRestDataClient
+                .builder(new feign.codec.Encoder.Default(),
+                         new feign.codec.Decoder.Default())
+                .target(SwaggerService.class, runtimeTestsConfigurationProperties.getQueryUrl());
+    }
+
+    @Bean
+    public SwaggerService auditSwaggerService(){
+        return FeignRestDataClient
+                .builder(new feign.codec.Encoder.Default(),
+                         new feign.codec.Decoder.Default())
+                .target(SwaggerService.class, runtimeTestsConfigurationProperties.getAuditEventUrl());
     }
 
 }
