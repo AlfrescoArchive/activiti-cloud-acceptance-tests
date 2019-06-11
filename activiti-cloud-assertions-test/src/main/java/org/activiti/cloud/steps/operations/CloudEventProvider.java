@@ -24,6 +24,7 @@ import org.activiti.cloud.api.model.shared.events.CloudRuntimeEvent;
 import org.activiti.cloud.client.EventsClient;
 import org.activiti.steps.EventProvider;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.PagedResources;
 
 public class CloudEventProvider implements EventProvider {
@@ -39,7 +40,8 @@ public class CloudEventProvider implements EventProvider {
     public List<RuntimeEvent<?, ?>> getEvents() {
         PagedResources<CloudRuntimeEvent<?, ?>> eventResources = eventsClient.findAll(null,
                                                                                       PageRequest.of(0,
-                                                                                                         PAGE_SIZE));
+                                                                                                     PAGE_SIZE,
+                                                                                                     Sort.Direction.DESC, "timestamp"));
         return new ArrayList<>(eventResources.getContent());
     }
 }
