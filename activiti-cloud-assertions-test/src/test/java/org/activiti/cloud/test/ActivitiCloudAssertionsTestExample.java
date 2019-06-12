@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps;
+package org.activiti.cloud.test;
 
 import org.activiti.api.process.model.ProcessInstance;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
