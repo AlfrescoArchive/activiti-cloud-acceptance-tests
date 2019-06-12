@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps.operations;
+package org.activiti.cloud.test.operations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +22,17 @@ import java.util.List;
 import org.activiti.api.model.shared.event.RuntimeEvent;
 import org.activiti.cloud.api.model.shared.events.CloudRuntimeEvent;
 import org.activiti.cloud.client.EventsClient;
-import org.activiti.steps.EventProvider;
+import org.activiti.test.EventSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.PagedResources;
 
-public class CloudEventProvider implements EventProvider {
+public class CloudEventSource implements EventSource {
 
     private static final int PAGE_SIZE = 1000;
     private EventsClient eventsClient;
 
-    public CloudEventProvider(EventsClient eventsClient) {
+    public CloudEventSource(EventsClient eventsClient) {
         this.eventsClient = eventsClient;
     }
 

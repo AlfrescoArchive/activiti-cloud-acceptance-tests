@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps.operations;
+package org.activiti.cloud.test.operations;
 
 import java.util.List;
 
@@ -22,33 +22,34 @@ import org.activiti.api.process.model.payloads.SignalPayload;
 import org.activiti.api.process.model.payloads.StartProcessPayload;
 import org.activiti.cloud.api.process.model.CloudProcessInstance;
 import org.activiti.cloud.client.ProcessRuntimeClient;
-import org.activiti.steps.EventProvider;
-import org.activiti.steps.TaskProvider;
-import org.activiti.steps.assertions.ProcessInstanceAssertions;
-import org.activiti.steps.assertions.ProcessInstanceAssertionsImpl;
-import org.activiti.steps.assertions.SignalAssertions;
-import org.activiti.steps.operations.ProcessOperations;
+import org.activiti.test.EventSource;
+import org.activiti.test.TaskSource;
+import org.activiti.test.assertions.ProcessInstanceAssertions;
+import org.activiti.test.assertions.ProcessInstanceAssertionsImpl;
+import org.activiti.test.assertions.SignalAssertions;
+import org.activiti.test.operations.ProcessOperations;
 
 public class ProcessRuntimeClientOperations implements ProcessOperations {
 
     private ProcessRuntimeClient processRuntimeClient;
 
-    private EventProvider eventProvider;
+    private EventSource eventSource;
 
-    private List<TaskProvider> taskProviders;
+    private List<TaskSource> taskSources;
 
     public ProcessRuntimeClientOperations(ProcessRuntimeClient processRuntimeClient,
-                                          EventProvider eventProvider,
-                                          List<TaskProvider> taskProviders) {
+                                          EventSource eventSource,
+                                          List<TaskSource> taskSources) {
         this.processRuntimeClient = processRuntimeClient;
-        this.eventProvider = eventProvider;
-        this.taskProviders = taskProviders;
+        this.eventSource = eventSource;
+        this.taskSources = taskSources;
     }
 
     @Override
     public ProcessInstanceAssertions start(StartProcessPayload startProcessPayload) {
         CloudProcessInstance cloudProcessInstance = processRuntimeClient.startProcess(startProcessPayload);
-        return new ProcessInstanceAssertionsImpl(eventProvider, taskProviders, cloudProcessInstance);
+        return new ProcessInstanceAssertionsImpl(eventSource,
+                                                 taskSources, cloudProcessInstance);
     }
 
     @Override

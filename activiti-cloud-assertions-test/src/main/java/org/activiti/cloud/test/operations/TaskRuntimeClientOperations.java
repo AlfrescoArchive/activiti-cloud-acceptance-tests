@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps.operations;
+package org.activiti.cloud.test.operations;
 
 import java.util.List;
 
@@ -22,24 +22,24 @@ import org.activiti.api.task.model.payloads.ClaimTaskPayload;
 import org.activiti.api.task.model.payloads.CompleteTaskPayload;
 import org.activiti.cloud.api.task.model.CloudTask;
 import org.activiti.cloud.client.TaskRuntimeClient;
-import org.activiti.steps.EventProvider;
-import org.activiti.steps.TaskProvider;
-import org.activiti.steps.assertions.TaskAssertions;
-import org.activiti.steps.assertions.TaskAssertionsImpl;
-import org.activiti.steps.operations.TaskOperations;
+import org.activiti.test.EventSource;
+import org.activiti.test.TaskSource;
+import org.activiti.test.assertions.TaskAssertions;
+import org.activiti.test.assertions.TaskAssertionsImpl;
+import org.activiti.test.operations.TaskOperations;
 
 public class TaskRuntimeClientOperations implements TaskOperations {
 
     private TaskRuntimeClient taskRuntimeClient;
-    private EventProvider eventProvider;
-    private List<TaskProvider> taskProviders;
+    private EventSource eventSource;
+    private List<TaskSource> taskSources;
 
     public TaskRuntimeClientOperations(TaskRuntimeClient taskRuntimeClient,
-                                       EventProvider eventProvider,
-                                       List<TaskProvider> taskProviders) {
+                                       EventSource eventSource,
+                                       List<TaskSource> taskSources) {
         this.taskRuntimeClient = taskRuntimeClient;
-        this.eventProvider = eventProvider;
-        this.taskProviders = taskProviders;
+        this.eventSource = eventSource;
+        this.taskSources = taskSources;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class TaskRuntimeClientOperations implements TaskOperations {
 
     private TaskAssertionsImpl buildTaskAssertions(CloudTask cloudTask) {
         return new TaskAssertionsImpl(cloudTask,
-                                      taskProviders,
-                                      eventProvider);
+                                      taskSources,
+                                      eventSource);
     }
 
     @Override

@@ -14,43 +14,36 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps.operations;
+package org.activiti.cloud.test.operations;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.activiti.api.task.model.Task;
 import org.activiti.cloud.api.task.model.CloudTask;
-import org.activiti.cloud.client.TaskRuntimeClient;
-import org.activiti.steps.TaskProvider;
+import org.activiti.cloud.client.QueryTaskClient;
+import org.activiti.test.TaskSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedResources;
 
-public class RuntimeBundleTaskProvider implements TaskProvider {
+public class QueryTaskSource implements TaskSource {
 
-    private static final int MAX_ITEMS = 1000;
-    private TaskRuntimeClient taskRuntimeClient;
+    private QueryTaskClient queryTaskClient;
 
-    public RuntimeBundleTaskProvider(TaskRuntimeClient taskRuntimeClient) {
-        this.taskRuntimeClient = taskRuntimeClient;
+    public QueryTaskSource(QueryTaskClient queryTaskClient) {
+        this.queryTaskClient = queryTaskClient;
     }
 
     @Override
     public List<Task> getTasks(String processInstanceId) {
-        PagedResources<CloudTask> tasks = taskRuntimeClient.getTasks(processInstanceId,
-                                                                     PageRequest.of(0,
-                                                                                    MAX_ITEMS));
-        return new ArrayList<>(tasks.getContent());
+        PagedResources<CloudTask> taskPagedResources = queryTaskClient.getTasks(processInstanceId,
+                                                                                PageRequest.of(0,
+                                                                                               1000));
+        return new ArrayList<>(taskPagedResources.getContent());
     }
 
     @Override
     public boolean canHandle(Task.TaskStatus taskStatus) {
-        switch (taskStatus) {
-            case CREATED:
-            case ASSIGNED:
-            case SUSPENDED:
-                return true;
-        }
-        return false;
+        return true;
     }
 }

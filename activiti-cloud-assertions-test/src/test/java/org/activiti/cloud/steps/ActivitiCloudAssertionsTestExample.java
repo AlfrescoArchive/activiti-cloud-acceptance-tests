@@ -23,9 +23,9 @@ import org.activiti.api.task.model.builders.TaskPayloadBuilder;
 import org.activiti.cloud.CloudAssertionsTestApplication;
 import org.activiti.cloud.api.task.model.CloudTask;
 import org.activiti.cloud.client.TaskRuntimeClient;
-import org.activiti.steps.matchers.TaskMatchers;
-import org.activiti.steps.operations.ProcessOperations;
-import org.activiti.steps.operations.TaskOperations;
+import org.activiti.test.matchers.TaskMatchers;
+import org.activiti.test.operations.ProcessOperations;
+import org.activiti.test.operations.TaskOperations;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +34,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.activiti.steps.matchers.BPMNStartEventMatchers.startEvent;
-import static org.activiti.steps.matchers.EndEventMatchers.endEvent;
-import static org.activiti.steps.matchers.ManualTaskMatchers.manualTask;
-import static org.activiti.steps.matchers.ProcessInstanceMatchers.processInstance;
-import static org.activiti.steps.matchers.ProcessTaskMatchers.task;
-import static org.activiti.steps.matchers.ProcessVariableMatchers.processVariable;
-import static org.activiti.steps.matchers.SequenceFlowMatchers.sequenceFlow;
+import static org.activiti.test.matchers.BPMNStartEventMatchers.startEvent;
+import static org.activiti.test.matchers.EndEventMatchers.endEvent;
+import static org.activiti.test.matchers.ManualTaskMatchers.manualTask;
+import static org.activiti.test.matchers.ProcessInstanceMatchers.processInstance;
+import static org.activiti.test.matchers.ProcessTaskMatchers.taskWithName;
+import static org.activiti.test.matchers.ProcessVariableMatchers.processVariable;
+import static org.activiti.test.matchers.SequenceFlowMatchers.sequenceFlow;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = CloudAssertionsTestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -70,7 +70,7 @@ public class ActivitiCloudAssertionsTestExample {
                                         .withVariable("client",
                                                       "the best")
                                         .build())
-                .expect(
+                .expectEvents(
                         processInstance()
                                 .hasBeenStarted(),
                         processVariable("client",
@@ -90,11 +90,11 @@ public class ActivitiCloudAssertionsTestExample {
                                 .hasBeenCompleted()
 
                 )
-                .expect(
+                .expectFields(
                         processInstance()
-                                .hasBusinessKey("my-business-key"),
+                                .businessKey("my-business-key"),
                         processInstance()
-                                .hasName("my-process-instance-name")
+                                .name("my-process-instance-name")
 
                 )
         ;
@@ -109,28 +109,29 @@ public class ActivitiCloudAssertionsTestExample {
                                                                           .withBusinessKey("my-business-key")
                                                                           .withName("my-process-instance-name")
                                                                           .build())
-                .expect(
+                .expectEvents(
                         processInstance()
                                 .hasBeenStarted(),
                         startEvent("StartEvent_1")
                                 .hasBeenCompleted(),
                         sequenceFlow("SequenceFlow_052072h")
                                 .hasBeenTaken(),
-                        task("Task Group 1")
+                        taskWithName("Task Group 1")
                                 .hasBeenCreated()
 
                 )
-                .expect(processInstance()
-                                .hasBusinessKey("my-business-key"),
-                        processInstance()
-                                .hasName("my-process-instance-name"))
+                .expectFields(processInstance()
+                                      .businessKey("my-business-key"),
+                              processInstance()
+                                      .name("my-process-instance-name"))
                 .expect(processInstance()
                                 .hasTask("Task Group 1",
                                          Task.TaskStatus.CREATED))
                 .andReturn();
 
-        PagedResources<CloudTask> taskPagedResources = taskRuntimeClient.getTasks(processInstance.getId(), PageRequest.of(0,
-                                                                                                             MAX_ITEMS));
+        PagedResources<CloudTask> taskPagedResources = taskRuntimeClient.getTasks(processInstance.getId(),
+                                                                                  PageRequest.of(0,
+                                                                                                 MAX_ITEMS));
 
         assertThat(taskPagedResources.getContent()).hasSize(1);
 
@@ -140,22 +141,22 @@ public class ActivitiCloudAssertionsTestExample {
                                      .withTaskId(
                                              task.getId())
                                      .build())
-                .expect(TaskMatchers.task()
+                .expectEvents(TaskMatchers.task()
                                 .hasBeenAssigned())
-                .expect(TaskMatchers.task()
-                                .hasAssignee(USERNAME));
+                .expectFields(TaskMatchers.task()
+                                .assignee(USERNAME));
 
         taskOperations.complete(TaskPayloadBuilder
                                         .complete()
                                         .withTaskId(task.getId())
                                         .build())
-                .expect(
+                .expectEvents(
                         TaskMatchers.task().hasBeenCompleted(),
-                        task("Task Group 2").hasBeenCreated()
+                        taskWithName("Task Group 2").hasBeenCreated()
                 )
                 .expect(processInstance()
                                 .hasTask("Task Group 1",
-                                                  Task.TaskStatus.COMPLETED),
+                                         Task.TaskStatus.COMPLETED),
                         processInstance()
                                 .hasTask("Task Group 2",
                                          Task.TaskStatus.CREATED))

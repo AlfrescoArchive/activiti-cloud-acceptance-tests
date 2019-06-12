@@ -14,36 +14,43 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.steps.operations;
+package org.activiti.cloud.test.operations;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.activiti.api.task.model.Task;
 import org.activiti.cloud.api.task.model.CloudTask;
-import org.activiti.cloud.client.QueryTaskClient;
-import org.activiti.steps.TaskProvider;
+import org.activiti.cloud.client.TaskRuntimeClient;
+import org.activiti.test.TaskSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.PagedResources;
 
-public class QueryTaskProvider implements TaskProvider {
+public class RuntimeBundleTaskSource implements TaskSource {
 
-    private QueryTaskClient queryTaskClient;
+    private static final int MAX_ITEMS = 1000;
+    private TaskRuntimeClient taskRuntimeClient;
 
-    public QueryTaskProvider(QueryTaskClient queryTaskClient) {
-        this.queryTaskClient = queryTaskClient;
+    public RuntimeBundleTaskSource(TaskRuntimeClient taskRuntimeClient) {
+        this.taskRuntimeClient = taskRuntimeClient;
     }
 
     @Override
     public List<Task> getTasks(String processInstanceId) {
-        PagedResources<CloudTask> taskPagedResources = queryTaskClient.getTasks(processInstanceId,
-                                                                                PageRequest.of(0,
-                                                                                               1000));
-        return new ArrayList<>(taskPagedResources.getContent());
+        PagedResources<CloudTask> tasks = taskRuntimeClient.getTasks(processInstanceId,
+                                                                     PageRequest.of(0,
+                                                                                    MAX_ITEMS));
+        return new ArrayList<>(tasks.getContent());
     }
 
     @Override
     public boolean canHandle(Task.TaskStatus taskStatus) {
-        return true;
+        switch (taskStatus) {
+            case CREATED:
+            case ASSIGNED:
+            case SUSPENDED:
+                return true;
+        }
+        return false;
     }
 }
