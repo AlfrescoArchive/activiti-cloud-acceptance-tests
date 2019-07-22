@@ -16,6 +16,8 @@
 
 package org.activiti.cloud.acc.core.steps.audit;
 
+import static org.activiti.api.process.model.events.BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED;
+import static org.activiti.api.process.model.events.BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.awaitility.Awaitility.await;
@@ -29,6 +31,7 @@ import net.thucydides.core.annotations.Step;
 import org.activiti.api.model.shared.event.RuntimeEvent;
 import org.activiti.api.model.shared.event.VariableEvent;
 import org.activiti.api.process.model.events.BPMNActivityEvent;
+import org.activiti.api.process.model.events.BPMNTimerEvent;
 import org.activiti.api.process.model.events.ProcessRuntimeEvent;
 import org.activiti.api.task.model.Task;
 import org.activiti.api.task.model.events.TaskRuntimeEvent;
@@ -383,6 +386,12 @@ public class AuditSteps {
         String filter = "entityId:";
         return auditService.getEvents(filter + entityId).getContent();
     }
+    
+    @Step
+    public Collection<CloudRuntimeEvent> getEventsByProcessAndEntityId(String processInstanceId,
+                                                                       String entityId){
+        return auditService.getEvents("entityId:" + entityId + ",processInstanceId:" + processInstanceId).getContent();
+    }
 
     @Step
     public void checkTaskUpdatedEvent(String taskId){
@@ -439,11 +448,9 @@ public class AuditSteps {
                               tuple(BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
                                     "subProcess",
                                     processInstanceId));
-
-
         });
     }
-    
+  
     @Step
     public void checkProcessInstanceInclusiveGatewayEvents(String processInstanceId, String gatewayId){
      
@@ -465,12 +472,100 @@ public class AuditSteps {
                                     gatewayId,
                                     "inclusiveGateway",
                                     processInstanceId));
-
-
         });
     }
     
+    @Step
+    public void checkProcessInstanceTimerScheduledEvents(String processInstanceId, String timerId){
+        
+        await().untilAsserted(() -> {
+            Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
+            assertThat(receivedEvents)
+                    .isNotEmpty()
+                    .extracting("eventType",
+                                "entityId",
+                                "entity.processInstanceId")
+                    .contains(tuple(BPMNActivityEvent.ActivityEvents.ACTIVITY_STARTED,
+                                    timerId,
+                                    processInstanceId),
+                              tuple(BPMNTimerEvent.TimerEvents.TIMER_SCHEDULED,
+                                    timerId,
+                                    processInstanceId));
+        });
+    }
     
+    @Step
+    public void checkProcessInstanceTimerFiredEvents(String processInstanceId, String timerId){
+        
+        await().untilAsserted(() -> {
+            Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
+            assertThat(receivedEvents)
+                    .isNotEmpty()
+                    .extracting("eventType",
+                                "entityId",
+                                "entity.processInstanceId")
+                    .contains(tuple(BPMNTimerEvent.TimerEvents.TIMER_FIRED,
+                                    timerId,
+                                    processInstanceId));
+        });
+    }
+    
+    @Step
+    public void checkProcessInstanceTimerExecutedEvents(String processInstanceId, String timerId){
+        
+        await().untilAsserted(() -> {
+            Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
+            assertThat(receivedEvents)
+                    .isNotEmpty()
+                    .extracting("eventType",
+                                "entityId",
+                                "entity.processInstanceId")
+                    .contains(tuple(BPMNTimerEvent.TimerEvents.TIMER_FIRED,
+                                    timerId,
+                                    processInstanceId),
+                              tuple(BPMNTimerEvent.TimerEvents.TIMER_EXECUTED,
+                                    timerId,
+                                    processInstanceId),
+                              tuple(BPMNActivityEvent.ActivityEvents.ACTIVITY_COMPLETED,
+                                    timerId,
+                                    processInstanceId));
+        });
+    }   
+    
+    @Step
+    public void checkProcessInstanceTimerCancelledEvents(String processInstanceId, String timerId){
+        
+        await().untilAsserted(() -> {
+            Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
+            assertThat(receivedEvents)
+                    .isNotEmpty()
+                    .extracting("eventType",
+                                "entityId",
+                                "entity.processInstanceId")
+                    .contains(tuple(BPMNTimerEvent.TimerEvents.TIMER_CANCELLED,
+                                    timerId,
+                                    processInstanceId));
+        });
+    }   
+    
+    @Step
+    public void checkProcessInstanceTimerFailedEvents(String processInstanceId, String timerId){
+        
+        await().untilAsserted(() -> {
+            Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
+            assertThat(receivedEvents)
+                    .isNotEmpty()
+                    .extracting("eventType",
+                                "entityId",
+                                "entity.processInstanceId")
+                    .contains(tuple(BPMNTimerEvent.TimerEvents.TIMER_RETRIES_DECREMENTED,
+                                    timerId,
+                                    processInstanceId),
+                              tuple(BPMNTimerEvent.TimerEvents.TIMER_FAILED,
+                                    timerId,
+                                    processInstanceId));
+        });
+    }     
 }
 
 
