@@ -476,9 +476,12 @@ public class AuditSteps {
     }
     
     @Step
-    public void checkProcessInstanceTimerScheduledEvents(String processInstanceId, String timerId){
+    public void checkProcessInstanceTimerScheduledEvents(String processInstanceId, 
+                                                         String timerId,
+                                                         long timeoutSeconds){
         
-        await().untilAsserted(() -> {
+        await().atMost(timeoutSeconds,
+                      TimeUnit.SECONDS).untilAsserted(() -> {
             Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
             assertThat(receivedEvents)
                     .isNotEmpty()
@@ -495,9 +498,12 @@ public class AuditSteps {
     }
     
     @Step
-    public void checkProcessInstanceTimerFiredEvents(String processInstanceId, String timerId){
+    public void checkProcessInstanceTimerFiredEvents(String processInstanceId, 
+                                                     String timerId,
+                                                     long timeoutSeconds){
         
-        await().untilAsserted(() -> {
+        await().atMost(timeoutSeconds,
+                      TimeUnit.SECONDS).untilAsserted(() -> {
             Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
             assertThat(receivedEvents)
                     .isNotEmpty()
@@ -511,9 +517,12 @@ public class AuditSteps {
     }
     
     @Step
-    public void checkProcessInstanceTimerExecutedEvents(String processInstanceId, String timerId){
+    public void checkProcessInstanceTimerExecutedEvents(String processInstanceId, 
+                                                        String timerId,
+                                                        long timeoutSeconds){
         
-        await().untilAsserted(() -> {
+        await().atMost(timeoutSeconds,
+                         TimeUnit.SECONDS).untilAsserted(() -> {
             Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
             assertThat(receivedEvents)
                     .isNotEmpty()
@@ -533,9 +542,12 @@ public class AuditSteps {
     }   
     
     @Step
-    public void checkProcessInstanceTimerCancelledEvents(String processInstanceId, String timerId){
+    public void checkProcessInstanceTimerCancelledEvents(String processInstanceId, 
+                                                         String timerId,
+                                                         long timeoutSeconds){
         
-        await().untilAsserted(() -> {
+        await().atMost(timeoutSeconds,
+                          TimeUnit.SECONDS).untilAsserted(() -> {
             Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
             assertThat(receivedEvents)
                     .isNotEmpty()
@@ -549,9 +561,12 @@ public class AuditSteps {
     }   
     
     @Step
-    public void checkProcessInstanceTimerFailedEvents(String processInstanceId, String timerId){
+    public void checkProcessInstanceTimerFailedEvents(String processInstanceId, 
+                                                      String timerId,
+                                                      long timeoutSeconds){
         
-        await().untilAsserted(() -> {
+        await().atMost(timeoutSeconds,
+                       TimeUnit.SECONDS).untilAsserted(() -> {
             Collection <CloudRuntimeEvent> receivedEvents = getEventsByProcessAndEntityId(processInstanceId, timerId);
             assertThat(receivedEvents)
                     .isNotEmpty()
