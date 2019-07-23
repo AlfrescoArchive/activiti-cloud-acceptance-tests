@@ -390,6 +390,11 @@ public class AuditSteps {
                                                                        String entityId){
         return auditService.getEvents("entityId:" + entityId + ",processInstanceId:" + processInstanceId).getContent();
     }
+    
+    @Step
+    public Collection<CloudRuntimeEvent> getEventsByProcessDefinitionKey(String processDefinitionKey){
+        return auditService.getEvents("processDefinitionKey:" + processDefinitionKey).getContent();
+    }
 
     @Step
     public void checkTaskUpdatedEvent(String taskId){
