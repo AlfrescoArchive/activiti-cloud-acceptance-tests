@@ -7,11 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thucydides.core.annotations.Step;
 import org.activiti.api.process.model.ProcessDefinition;
-import org.activiti.api.process.model.builders.MessagePayloadBuilder;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
-import org.activiti.api.process.model.builders.ReceiveMessagePayloadBuilder;
-import org.activiti.api.process.model.builders.StartMessagePayloadBuilder;
 import org.activiti.api.process.model.builders.StartProcessPayloadBuilder;
+import org.activiti.api.process.model.payloads.ReceiveMessagePayload;
+import org.activiti.api.process.model.payloads.StartMessagePayload;
 import org.activiti.cloud.acc.core.rest.RuntimeDirtyContextHandler;
 import org.activiti.cloud.acc.core.rest.feign.EnableRuntimeFeignContext;
 import org.activiti.cloud.acc.core.services.runtime.ProcessRuntimeService;
@@ -182,28 +181,13 @@ public class ProcessRuntimeBundleSteps {
     }
     
     @Step
-    public CloudProcessInstance start(String messageName, 
-                                      String businessKey, 
-                                      Map<String, Object> variables) throws IOException {
-
-        StartMessagePayloadBuilder payload = MessagePayloadBuilder.start(messageName)
-                                                                  .withBusinessKey(businessKey)
-                                                                  .withVariables(variables);
-
-        return dirtyContextHandler.dirty(processRuntimeService.message(payload.build()));
+    public CloudProcessInstance message(StartMessagePayload payload) throws IOException {
+        return dirtyContextHandler.dirty(processRuntimeService.message(payload));
     }
     
     @Step
-    public void receive(String messageName, 
-                        String correlationKey, 
-                        Map<String, Object> variables) throws IOException {
-
-        ReceiveMessagePayloadBuilder payload = MessagePayloadBuilder.receive(messageName)
-                                                                    .withCorrelationKey(correlationKey)
-                                                                    .withVariables(variables);
-
-        processRuntimeService.message(payload.build());
+    public void message(ReceiveMessagePayload payload) throws IOException {
+        processRuntimeService.message(payload);
     }
-    
     
 }
