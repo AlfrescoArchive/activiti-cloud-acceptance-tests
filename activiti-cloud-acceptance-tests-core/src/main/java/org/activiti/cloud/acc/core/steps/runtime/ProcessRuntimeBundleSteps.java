@@ -1,13 +1,16 @@
 package org.activiti.cloud.acc.core.steps.runtime;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
+import static org.activiti.cloud.acc.core.assertions.RestErrorAssert.assertThatRestNotFoundErrorIsThrownBy;
+import static org.activiti.cloud.acc.core.helper.SvgToPng.svgToPng;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thucydides.core.annotations.Step;
 import org.activiti.api.process.model.ProcessDefinition;
+import org.activiti.api.process.model.builders.MessagePayloadBuilder;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
+import org.activiti.api.process.model.builders.ReceiveMessagePayloadBuilder;
+import org.activiti.api.process.model.builders.StartMessagePayloadBuilder;
 import org.activiti.api.process.model.builders.StartProcessPayloadBuilder;
 import org.activiti.cloud.acc.core.rest.RuntimeDirtyContextHandler;
 import org.activiti.cloud.acc.core.rest.feign.EnableRuntimeFeignContext;
@@ -19,9 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedResources;
 
-import static org.activiti.cloud.acc.core.assertions.RestErrorAssert.assertThatRestNotFoundErrorIsThrownBy;
-import static org.activiti.cloud.acc.core.helper.SvgToPng.svgToPng;
-import static org.assertj.core.api.Assertions.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 @EnableRuntimeFeignContext
 public class ProcessRuntimeBundleSteps {
@@ -177,4 +180,30 @@ public class ProcessRuntimeBundleSteps {
                 ProcessPayloadBuilder.update().withName(processInstanceName).build());
 
     }
+    
+    @Step
+    public CloudProcessInstance start(String messageName, 
+                                      String businessKey, 
+                                      Map<String, Object> variables) throws IOException {
+
+        StartMessagePayloadBuilder payload = MessagePayloadBuilder.start(messageName)
+                                                                  .withBusinessKey(businessKey)
+                                                                  .withVariables(variables);
+
+        return dirtyContextHandler.dirty(processRuntimeService.message(payload.build()));
+    }
+    
+    @Step
+    public void receive(String messageName, 
+                        String correlationKey, 
+                        Map<String, Object> variables) throws IOException {
+
+        ReceiveMessagePayloadBuilder payload = MessagePayloadBuilder.receive(messageName)
+                                                                    .withCorrelationKey(correlationKey)
+                                                                    .withVariables(variables);
+
+        processRuntimeService.message(payload.build());
+    }
+    
+    
 }
