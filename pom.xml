@@ -36,7 +36,7 @@
     <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     <feign-form.version>3.5.0</feign-form.version>
     <awaitility.version>3.1.1</awaitility.version>
-    <batik.version>1.10</batik.version>
+    <batik.version>1.12</batik.version>
   </properties>
 
   <dependencyManagement>
