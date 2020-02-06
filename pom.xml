@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.activiti.cloud.build</groupId>
     <artifactId>activiti-cloud-parent</artifactId>
-    <version>7.1.33</version>
+    <version>7.1.0.M6</version>
     <relativePath/>
   </parent>
   <groupId>org.activiti.cloud.acc</groupId>
   <artifactId>activiti-cloud-acceptance-tests-parent</artifactId>
-  <version>7.1.183</version>
+  <version>7.1.0.M6</version>
   <name>Activiti Cloud :: Acceptance Tests</name>
   <packaging>pom</packaging>
   <modules>
@@ -20,9 +20,9 @@
     <module>activiti-cloud-acceptance-tests-core</module>
   </modules>
   <properties>
-    <activiti-cloud-build.version>7.1.33</activiti-cloud-build.version>
-    <activiti-cloud-api.version>7.1.131</activiti-cloud-api.version>
-    <activiti-cloud-acceptance-tests.version>${project.version}</activiti-cloud-acceptance-tests.version>
+    <activiti-cloud-build.version>7.1.0.M6</activiti-cloud-build.version>
+    <activiti-cloud-api.version>7.1.0.M6</activiti-cloud-api.version>
+    <activiti-cloud-acceptance-tests.version>7.1.0.M6</activiti-cloud-acceptance-tests.version>
     <serenity.version>1.9.6</serenity.version>
     <serenity-jbehave.version>1.38.0</serenity-jbehave.version>
     <feign-form.version>3.5.0</feign-form.version>
